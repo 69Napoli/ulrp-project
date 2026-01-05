@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Urban Legends - Cel mai imersiv server de roleplay FiveM din România">
+    <meta name="keywords" content="FiveM, Roleplay, GTA V, Romania, Urban Legends, ULRP">
+    <meta name="author" content="Poseidon Studio">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Urban Legends | FiveM Roleplay Server">
+    <meta property="og:description"
+        content="Trăiește experiența supremă pe Urban Legends - Cel mai imersiv server de roleplay FiveM din România">
+    <meta property="og:image" content="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png">
+    <meta property="og:url" content="https://ulrp.ro">
+    <meta property="og:type" content="website">
+
+    <!-- Discord Embed -->
+    <meta name="theme-color" content="#38bdf8">
+
+    <title>URBAN LEGENDS | FiveM Roleplay Server</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Loader Critical CSS -->
+    <style>
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #030712;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            /* Gap handled by margins for precise control */
+            transition: opacity 0.8s cubic-bezier(0.65, 0, 0.35, 1), transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), visibility 0.8s ease-out, filter 0.8s ease-out;
+            transform-origin: center;
+        }
+
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(1.1);
+            filter: blur(15px);
+            /* Subtle scale up exit */
+        }
+
+        .loader-logo-container {
+            margin-bottom: 40px;
+        }
+
+        .loader-logo {
+            width: 120px;
+            height: auto;
+            filter: drop_shadow(0 0 20px rgba(56, 189, 248, 0.4));
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        .loader-counter {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: clamp(4rem, 8vw, 8rem);
+            font-weight: 800;
+            color: #38bdf8;
+            line-height: 1;
+            margin-bottom: 30px;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.3);
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -2px;
+        }
+
+        .progress-track {
+            width: 250px;
+            height: 3px;
+            background: rgba(56, 189, 248, 0.15);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #7dd3fc);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .loader-text {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        body.loading {
+            overflow: hidden !important;
+        }
+
+        @keyframes logoPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.03);
+                opacity: 0.9;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-noise"></div>
+    <div class="bg-gradient"></div>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-logo-container">
+            <img src="assets/img/logo-loader.png" alt="Urban Legends" class="loader-logo">
+        </div>
+        <div class="loader-counter" id="loaderCounter">000</div>
+        <div class="progress-track">
+            <div class="progress-fill" id="loaderProgress"></div>
+        </div>
+        <div class="loader-text">SE ÎNCARCĂ...</div>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">
+                    <img src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Urban Legends">
+                    <span class="logo-text">URBAN LEGENDS</span>
+                </a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home" class="active">Acasă</a></li>
+                    <li><a href="#features">Informații</a></li>
+                    <li><a href="#server">Server</a></li>
+                    <li><a href="#updates">Updates</a></li>
+                    <li><a href="https://discord.gg/urbanlegends" target="_blank" class="nav-cta">Intră Discord</a></li>
+                </ul>
+                <div class="mobile-toggle" onclick="toggleMobile()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-wrapper">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="dot"></span>
+                        Server Online • România
+                    </div>
+                    <h1>URBAN <span>LEGENDS</span></h1>
+                    <p class="hero-description">Trăiește experiența supremă pe Urban Legends. Roleplay imersiv,
+                        comunitate activă și funcționalități unice te așteaptă.</p>
+                    <div class="hero-buttons">
+                        <a href="#server" class="btn btn-primary">
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                            Intră Acum
+                        </a>
+                        <a href="#features" class="btn btn-secondary">
+                            Despre Noi
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-stats">
+                        <div class="hero-stat-card">
+                            <div class="stat-header">
+                                <span class="stat-label">Jucători Online</span>
+                                <span class="stat-badge" data-server-status>OFFLINE</span>
+                            </div>
+                            <div class="stat-value"><span data-player-count>0</span><small>/<span
+                                        data-max-players>64</span></small></div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" data-player-bar style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="hero-stat-card">
+                            <div class="stat-header">
+                                <span class="stat-label">Resurse</span>
+                            </div>
+                            <div class="stat-value">320<small>+</small></div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="hero-stat-card featured">
+                            <div class="stat-header">
+                                <span class="stat-label">Scor Server</span>
+                                <span class="stat-badge">TOP</span>
+                            </div>
+                            <div class="stat-value">11,862</div>
+                            <div class="stat-bar">
+                                <div class="stat-bar-fill" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+        <div class="container">
+            <div class="quick-stats-grid">
+                <div class="quick-stat">
+                    <div class="quick-stat-value">320+</div>
+                    <div class="quick-stat-label">Resurse</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value">24/7</div>
+                    <div class="quick-stat-label">Online</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value">2.2K</div>
+                    <div class="quick-stat-label">Membri Discord</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value">99.9%</div>
+                    <div class="quick-stat-label">Uptime</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="quick-stat-value">10</div>
+                    <div class="quick-stat-label">Updates</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Informații Server</div>
+                <h2 class="section-title">De ce să alegi Urban Legends?</h2>
+                <p class="section-subtitle">Descoperă funcționalitățile care ne fac unici în comunitatea FiveM din
+                    România</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎭</div>
+                    <h3>Roleplay Imersiv</h3>
+                    <p>Experimentează roleplay realist cu sisteme personalizate de interacțiune și funcționalități unice
+                        create pentru comunitatea noastră.</p>
+                    <div class="feature-tags">
+                        <span class="tag">Premium</span>
+                        <span class="tag">Customizate</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚗</div>
+                    <h3>Mașini Custom</h3>
+                    <p>Explorează colecția noastră extinsă de vehicule personalizate de înaltă calitate cu modificări
+                        unice și sunete realiste.</p>
+                    <div class="feature-tags">
+                        <span class="tag">Sunete Custom</span>
+                        <span class="tag">Calitate</span>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Staff Activ</h3>
+                    <p>Echipa noastră dedicată asigură o experiență corectă și plăcută pentru toți jucătorii,
+                        disponibilă 24/7.</p>
+                    <div class="feature-tags">
+                        <span class="tag">Profesional</span>
+                        <span class="tag">24/7</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Server Section -->
+    <section id="server">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Acces Rapid</div>
+                <h2 class="section-title">Conectează-te pe Server</h2>
+                <p class="section-subtitle">Toate informațiile necesare pentru a te alătura comunității noastre</p>
+            </div>
+            <div class="server-grid">
+                <div>
+                    <div class="server-card">
+                        <div class="server-status">
+                            <div class="status-indicator" data-server-indicator></div>
+                            <span class="status-text" data-server-status-text>Server Offline</span>
+                        </div>
+                        <h3>Detalii Conexiune</h3>
+
+                        <div class="connect-field">
+                            <div class="connect-label">Direct Connect</div>
+                            <div class="connect-value">
+                                <code>connect server.ulrp.ro</code>
+                                <button class="copy-btn" onclick="copyText('connect server.ulrp.ro')">Copiază</button>
+                            </div>
+                        </div>
+
+                        <div class="connect-field">
+                            <div class="connect-label">CFX.re Link</div>
+                            <div class="connect-value">
+                                <code>cfx.re/join/kboee6</code>
+                                <button class="copy-btn" onclick="copyText('cfx.re/join/kboee6')">Copiază</button>
+                            </div>
+                        </div>
+
+                        <div class="server-details">
+                            <div class="detail-box">
+                                <div class="label">Jucători</div>
+                                <div class="value"><span data-player-count>0</span>/<span data-max-players>64</span>
+                                </div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="label">Ping</div>
+                                <div class="value">45ms</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="label">Regiune</div>
+                                <div class="value">🇪🇺 Europa</div>
+                            </div>
+                            <div class="detail-box">
+                                <div class="label">Versiune</div>
+                                <div class="value">1.8.5</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card" style="margin-top: 24px;">
+                        <div class="info-card-header">
+                            <h4>Urban Legends</h4>
+                            <span class="online-badge">Online</span>
+                        </div>
+                        <div class="info-list">
+                            <div class="info-row">
+                                <span class="key">Regiune Server</span>
+                                <span class="val">EU</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="key">Scor Server</span>
+                                <span class="val">11,862</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="key">Resurse</span>
+                                <span class="val">320</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="key">Server Uptime</span>
+                                <span class="val">99.9%</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="key">Fondator</span>
+                                <span class="val">VENDETTA</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="key">Framework</span>
+                                <span class="val">QBOX</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="discord-card">
+                        <div class="discord-banner" data-discord-banner></div>
+                        <img class="discord-server-icon" data-discord-icon
+                            src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Server Icon">
+                        <h3 class="discord-server-name" data-discord-name>Urban Legends</h3>
+                        <div class="discord-stats">
+                            <div class="discord-stat">
+                                <span class="num"><span class="online-dot"></span><span
+                                        data-discord-online>0</span></span>
+                                <span class="lbl">Online</span>
+                            </div>
+                            <div class="discord-stat">
+                                <span class="num">2.2K</span>
+                                <span class="lbl">Membri</span>
+                            </div>
+                        </div>
+                        <div class="discord-avatars" data-discord-avatars></div>
+                        <a href="https://discord.gg/urbanlegends" target="_blank" class="btn btn-discord"
+                            data-discord-invite>
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                            </svg>
+                            Intră pe Discord
+                        </a>
+                    </div>
+
+                    <div class="feature-card" style="margin-top: 24px;">
+                        <div class="feature-icon">⚡</div>
+                        <h3>Staff Online: 24/7</h3>
+                        <p>Echipa noastră de staff este mereu disponibilă pentru a te ajuta cu orice problemă întâmpini
+                            pe server.</p>
+                        <div class="feature-tags">
+                            <span class="tag">24/7 Support</span>
+                            <span class="tag">Staff matur</span>
+                            <span class="tag">Comunitate activă</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Updates Section -->
+    <section id="updates">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Noutăți</div>
+                <h2 class="section-title">Update-uri Recente</h2>
+                <p class="section-subtitle">Rămâi la curent cu cele mai recente îmbunătățiri aduse serverului</p>
+            </div>
+            <div class="updates-list">
+                <div class="update-card">
+                    <div class="update-header">
+                        <span class="version-tag">v1.8.5</span>
+                        <span class="update-date">În urmă cu 2 zile</span>
+                    </div>
+                    <h3>Pachet Nou de Vehicule</h3>
+                    <p>Am adăugat 15 vehicule personalizate noi pe serverul nostru, inclusiv BMW M8 Competition 2020,
+                        Mercedes-AMG GT 63S 2023, Porsche 911 GT3 RS 2023 și altele.</p>
+                    <div class="update-content">
+                        <div class="update-list-box">
+                            <h4>🚗 Vehicule Noi Adăugate</h4>
+                            <ul>
+                                <li>BMW M8 Competition 2020</li>
+                                <li>Mercedes-AMG GT 63S 2023</li>
+                                <li>Porsche 911 GT3 RS 2023</li>
+                                <li>Audi RS7 Sportback 2023</li>
+                                <li>Și multe altele...</li>
+                            </ul>
+                        </div>
+                        <div class="update-list-box">
+                            <h4>🔧 Funcționalități Vehicule</h4>
+                            <ul>
+                                <li>Handling personalizat pentru fiecare vehicul</li>
+                                <li>Interior și exterior detaliat</li>
+                                <li>Sunete realiste ale motorului</li>
+                                <li>Modificări personalizate disponibile</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="update-card">
+                    <div class="update-header">
+                        <span class="version-tag">v1.8.4</span>
+                        <span class="update-date">În urmă cu 5 zile</span>
+                    </div>
+                    <h3>Extindere Hartă</h3>
+                    <p>Noi zone adăugate pe hartă, inclusiv un mall de lux, complex de parcare subterană, nou district
+                        rezidențial și multiple zone de divertisment cu funcționalități exclusive.</p>
+                    <div class="update-content">
+                        <div class="update-list-box">
+                            <h4>🏢 Zone Noi</h4>
+                            <ul>
+                                <li>Mall de Lux</li>
+                                <li>Complex de Parcare Subterană</li>
+                                <li>District Rezidențial Nou</li>
+                                <li>Zonă de Divertisment</li>
+                                <li>Zone Exclusive VIP</li>
+                            </ul>
+                        </div>
+                        <div class="update-list-box">
+                            <h4>🎮 Funcționalități</h4>
+                            <ul>
+                                <li>Magazine și shopuri interactive</li>
+                                <li>Noi oportunități de job</li>
+                                <li>Colectabile ascunse</li>
+                                <li>Locații pentru evenimente speciale</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-bg"></div>
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ești gata să începi Aventura?</h2>
+                <p>Alătură-te serverului nostru astăzi și devino parte din comunitatea noastră vibrantă de roleplay.
+                    Experimentează o lume a posibilităților nelimitate.</p>
+                <div class="cta-buttons">
+                    <a href="#server" class="btn btn-primary">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        Intră pe Server
+                    </a>
+                    <a href="https://discord.gg/urbanlegends" target="_blank" class="btn btn-secondary">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+                        </svg>
+                        Intră pe Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <img src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Urban Legends">
+                        <span class="logo-text">URBAN LEGENDS</span>
+                    </a>
+                    <p>Experimentează cel mai imersiv server de roleplay FiveM cu scripturi personalizate, vehicule și o
+                        comunitate activă.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Navigație</h4>
+                    <ul>
+                        <li><a href="#home">Acasă</a></li>
+                        <li><a href="#features">Despre Noi</a></li>
+                        <li><a href="#server">Server</a></li>
+                        <li><a href="#updates">Updates</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="terms.html">Termeni și Servicii</a></li>
+                        <li><a href="privacy.html">Confidențialitate</a></li>
+                        <li><a href="rules.html">Reguli</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Conectează-te</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/urbanlegends" target="_blank">Discord</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 <a href="https://discord.gg/urbanlegends" target="_blank">Poseidon Studio</a>. Toate
+                    drepturile rezervate.</p>
+                <p>Not affiliated with Rockstar Games, Inc. or Take-Two Interactive Software, Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Copiat în clipboard!</div>
+
+    <!-- Lenis Scroll -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
