@@ -368,6 +368,174 @@ async function fetchDiscordWidget() {
 }
 
 // ========================================
+// Top Players Leaderboard
+// ========================================
+// TODO: Replace static data with API fetch
+// API Endpoint: https://your-server.com/api/leaderboard
+// Expected response: { players: [...] }
+
+const topPlayers = [
+    {
+        rank: 1,
+        name: "VENDETTA",
+        discord_id: "123456789",
+        discord_tag: "vendetta_rp",
+        avatar: "https://cdn.discordapp.com/embed/avatars/0.png",
+        hours: 512,
+        lastSeen: "Online"
+    },
+    {
+        rank: 2,
+        name: "xNapoli",
+        discord_id: "234567890",
+        discord_tag: "xnapoli",
+        avatar: "https://cdn.discordapp.com/embed/avatars/1.png",
+        hours: 487,
+        lastSeen: "Online"
+    },
+    {
+        rank: 3,
+        name: "DarkWolf",
+        discord_id: "345678901",
+        discord_tag: "darkwolf_ro",
+        avatar: "https://cdn.discordapp.com/embed/avatars/2.png",
+        hours: 423,
+        lastSeen: "Văzut acum 1h"
+    },
+    {
+        rank: 4,
+        name: "CristiRO",
+        discord_id: "456789012",
+        discord_tag: "cristiro",
+        avatar: "https://cdn.discordapp.com/embed/avatars/3.png",
+        hours: 389,
+        lastSeen: "Online"
+    },
+    {
+        rank: 5,
+        name: "ShadowKing",
+        discord_id: "567890123",
+        discord_tag: "shadowking",
+        avatar: "https://cdn.discordapp.com/embed/avatars/4.png",
+        hours: 356,
+        lastSeen: "Văzut acum 2h"
+    },
+    {
+        rank: 6,
+        name: "NightRider",
+        discord_id: "678901234",
+        discord_tag: "nightrider_rp",
+        avatar: "https://cdn.discordapp.com/embed/avatars/0.png",
+        hours: 312,
+        lastSeen: "Văzut acum 3h"
+    },
+    {
+        rank: 7,
+        name: "DragonFire",
+        discord_id: "789012345",
+        discord_tag: "dragonfire",
+        avatar: "https://cdn.discordapp.com/embed/avatars/1.png",
+        hours: 278,
+        lastSeen: "Online"
+    },
+    {
+        rank: 8,
+        name: "StormBreaker",
+        discord_id: "890123456",
+        discord_tag: "stormbreaker",
+        avatar: "https://cdn.discordapp.com/embed/avatars/2.png",
+        hours: 234,
+        lastSeen: "Văzut acum 5h"
+    },
+    {
+        rank: 9,
+        name: "IcePhoenix",
+        discord_id: "901234567",
+        discord_tag: "icephoenix_ro",
+        avatar: "https://cdn.discordapp.com/embed/avatars/3.png",
+        hours: 198,
+        lastSeen: "Văzut acum 1 zi"
+    },
+    {
+        rank: 10,
+        name: "BlazeMaster",
+        discord_id: "012345678",
+        discord_tag: "blazemaster",
+        avatar: "https://cdn.discordapp.com/embed/avatars/4.png",
+        hours: 156,
+        lastSeen: "Online"
+    }
+];
+
+function renderTop3Players() {
+    const container = document.getElementById('topThreePlayers');
+    if (!container) return;
+
+    const top3 = topPlayers.slice(0, 3);
+    const rankColors = ['gold', 'silver', 'bronze'];
+
+    container.innerHTML = top3.map((player, index) => {
+        const rankClass = `rank-${player.rank}`;
+        const badgeClass = rankColors[index];
+        const isOnline = player.lastSeen === 'Online';
+        const crown = player.rank === 1 ? '<span class="crown-icon">👑</span>' : '';
+
+        return `
+            <div class="top-player-card ${rankClass}">
+                ${crown}
+                <div class="rank-badge ${badgeClass}">
+                    #${player.rank}
+                </div>
+                <div class="player-avatar-container">
+                    <img src="${player.avatar}" alt="${player.name}" class="player-avatar">
+                    <div class="online-indicator ${isOnline ? '' : 'offline'}"></div>
+                </div>
+                <div class="player-name">${player.name}</div>
+                <div class="player-discord-tag">@${player.discord_tag}</div>
+                <div class="hours-display">
+                    <span class="hours-number">${player.hours}</span>
+                    <span class="hours-label">ore</span>
+                </div>
+                <div class="last-seen ${isOnline ? 'online' : ''}">${isOnline ? 'Online acum' : player.lastSeen}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+function renderLeaderboardList() {
+    const container = document.getElementById('leaderboardList');
+    if (!container) return;
+
+    const restPlayers = topPlayers.slice(3);
+
+    container.innerHTML = restPlayers.map(player => {
+        const isOnline = player.lastSeen === 'Online';
+
+        return `
+            <div class="leaderboard-row">
+                <div class="row-left">
+                    <span class="row-rank">#${player.rank}</span>
+                    <img src="${player.avatar}" alt="${player.name}" class="row-avatar">
+                    <div class="row-info">
+                        <span class="row-name">${player.name}</span>
+                        <span class="row-discord">@${player.discord_tag}</span>
+                    </div>
+                </div>
+                <div class="hours-badge">
+                    <span class="hours-value">${player.hours}</span>
+                    <span class="hours-text">ore</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function initLeaderboard() {
+    renderTop3Players();
+    renderLeaderboardList();
+}
+
+// ========================================
 // Initialize
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -386,6 +554,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchDiscordWidget();
     // Refresh Discord data every 60 seconds
     setInterval(fetchDiscordWidget, 60000);
+
+    // Initialize Top Players Leaderboard
+    initLeaderboard();
 
     // Add loaded class for CSS animations
     document.body.classList.add('loaded');

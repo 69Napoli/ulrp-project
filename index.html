@@ -160,6 +160,16 @@
                     <li><a href="#features">Informații</a></li>
                     <li><a href="#server">Server</a></li>
                     <li><a href="#updates">Updates</a></li>
+                    <li><a href="https://ulrp.ro/rules.html" target="_blank">Regulament</a></li>
+                    <li>
+                        <a href="https://store.ulrp.ro/" target="_blank" class="nav-shop">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                            </svg>
+                            Shop
+                        </a>
+                    </li>
                     <li><a href="https://discord.gg/urbanlegends" target="_blank" class="nav-cta">Intră Discord</a></li>
                 </ul>
                 <div class="mobile-toggle" onclick="toggleMobile()">
@@ -184,7 +194,7 @@
                     <p class="hero-description">Trăiește experiența supremă pe Urban Legends. Roleplay imersiv,
                         comunitate activă și funcționalități unice te așteaptă.</p>
                     <div class="hero-buttons">
-                        <a href="#server" class="btn btn-primary">
+                        <a href="https://cfx.re/join/kboee6" class="btn btn-primary">
                             <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M8 5v14l11-7z" />
                             </svg>
@@ -192,6 +202,15 @@
                         </a>
                         <a href="#features" class="btn btn-secondary">
                             Despre Noi
+                        </a>
+                        <a href="https://ulrp.ro/rules.html" target="_blank" class="btn btn-outline">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Regulament
                         </a>
                     </div>
                 </div>
@@ -302,6 +321,33 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Top Players Leaderboard Section -->
+    <section id="leaderboard">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">CLASAMENT</div>
+                <h2 class="section-title">Top Jucători</h2>
+                <p class="section-subtitle">Cei mai activi membri ai comunității noastre</p>
+            </div>
+
+            <div class="leaderboard-container">
+                <!-- Top 3 Players - Featured Row -->
+                <div class="top-three-container" id="topThreePlayers">
+                    <!-- Top 3 will be rendered by JavaScript -->
+                </div>
+
+                <!-- Leaderboard List (4th - 10th) -->
+                <div class="leaderboard-list" id="leaderboardList">
+                    <!-- List will be rendered by JavaScript -->
+                </div>
+            </div>
+
+            <!-- TODO: Replace static data with API fetch
+                 API Endpoint: https://your-server.com/api/leaderboard
+                 Expected response: { players: [...] } -->
         </div>
     </section>
 
@@ -520,7 +566,7 @@
                 <p>Alătură-te serverului nostru astăzi și devino parte din comunitatea noastră vibrantă de roleplay.
                     Experimentează o lume a posibilităților nelimitate.</p>
                 <div class="cta-buttons">
-                    <a href="#server" class="btn btn-primary">
+                    <a href="https://cfx.re/join/kboee6" class="btn btn-primary">
                         <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z" />
                         </svg>

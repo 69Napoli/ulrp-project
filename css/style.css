@@ -187,16 +187,39 @@ nav {
     color: var(--primary);
 }
 
+.nav-cta,
+.nav-shop {
+    padding: 10px 20px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-left: 8px;
+    transition: all 0.2s ease !important;
+}
+
 .nav-cta {
     background: var(--primary) !important;
     color: var(--bg-primary) !important;
-    font-weight: 600 !important;
-    margin-left: 8px;
 }
 
 .nav-cta:hover {
     background: var(--primary-light) !important;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
+}
+
+.nav-shop {
+    background: linear-gradient(135deg, #f59e0b, #f97316) !important;
+    color: #030712 !important;
+}
+
+.nav-shop:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, #fbbf24, #fb923c) !important;
 }
 
 .mobile-toggle {
@@ -252,6 +275,18 @@ nav {
 .btn-secondary:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--border-hover);
+}
+
+.btn-outline {
+    background: rgba(56, 189, 248, 0.1);
+    color: var(--primary);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.btn-outline:hover {
+    background: rgba(56, 189, 248, 0.2);
+    border-color: rgba(56, 189, 248, 0.5);
+    transform: translateY(-2px);
 }
 
 /* ========================================
@@ -926,6 +961,431 @@ section {
 }
 
 /* ========================================
+   Top Players Leaderboard Section
+   ======================================== */
+.leaderboard-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Top 3 Players Featured Row */
+.top-three-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+/* Top 3 Card Base */
+.top-player-card {
+    background: #0a0f1a;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 260px;
+}
+
+.top-player-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Rank-specific styling */
+.top-player-card.rank-1 {
+    background: linear-gradient(135deg, #0a0f1a, rgba(255, 215, 0, 0.05));
+    border-color: rgba(255, 215, 0, 0.3);
+    padding: 32px;
+    max-width: 280px;
+    order: 2;
+    animation: goldPulse 3s ease-in-out infinite;
+}
+
+.top-player-card.rank-2 {
+    border-color: rgba(192, 192, 192, 0.3);
+    order: 1;
+}
+
+.top-player-card.rank-3 {
+    border-color: rgba(205, 127, 50, 0.3);
+    order: 3;
+}
+
+@keyframes goldPulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.1), 0 0 40px rgba(255, 215, 0, 0.05);
+    }
+
+    50% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.2), 0 0 60px rgba(255, 215, 0, 0.1);
+    }
+}
+
+/* Rank Badge */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.rank-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 100%;
+    }
+}
+
+.rank-badge.gold {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #1a1a1a;
+}
+
+.rank-badge.silver {
+    background: linear-gradient(135deg, #C0C0C0, #A8A8A8);
+    color: #1a1a1a;
+}
+
+.rank-badge.bronze {
+    background: linear-gradient(135deg, #CD7F32, #B87333);
+    color: #1a1a1a;
+}
+
+/* Crown Icon */
+.crown-icon {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+    display: block;
+    animation: crownFloat 2s ease-in-out infinite;
+}
+
+@keyframes crownFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Player Avatar */
+.player-avatar-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+}
+
+.player-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(56, 189, 248, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.top-player-card:hover .player-avatar {
+    transform: scale(1.05);
+}
+
+.top-player-card.rank-1 .player-avatar {
+    border-color: rgba(255, 215, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.top-player-card.rank-2 .player-avatar {
+    border-color: rgba(192, 192, 192, 0.5);
+    box-shadow: 0 0 20px rgba(192, 192, 192, 0.2);
+}
+
+.top-player-card.rank-3 .player-avatar {
+    border-color: rgba(205, 127, 50, 0.5);
+    box-shadow: 0 0 20px rgba(205, 127, 50, 0.2);
+}
+
+/* Online Status Indicator */
+.online-indicator {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    background: #22c55e;
+    border-radius: 50%;
+    border: 2px solid #0a0f1a;
+    animation: pulse 2s ease infinite;
+}
+
+.online-indicator.offline {
+    background: #64748b;
+    animation: none;
+}
+
+/* Player Info */
+.player-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.player-discord-tag {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+}
+
+/* Hours Display */
+.hours-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.hours-number {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.hours-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Last Seen */
+.last-seen {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+.last-seen.online {
+    color: var(--success);
+}
+
+/* ========================================
+   Leaderboard List (4th - 10th)
+   ======================================== */
+.leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.leaderboard-row {
+    background: #0a0f1a;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slideIn 0.5s ease forwards;
+}
+
+.leaderboard-row:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.leaderboard-row:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.leaderboard-row:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.leaderboard-row:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.leaderboard-row:nth-child(5) {
+    animation-delay: 0.3s;
+}
+
+.leaderboard-row:nth-child(6) {
+    animation-delay: 0.35s;
+}
+
+.leaderboard-row:nth-child(7) {
+    animation-delay: 0.4s;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.leaderboard-row:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+    transform: translateX(8px);
+}
+
+/* Row Left Side */
+.row-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.row-rank {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    min-width: 32px;
+    text-align: center;
+}
+
+.row-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.row-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.row-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.row-discord {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Hours Badge */
+.hours-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.hours-badge .hours-value {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.hours-badge .hours-text {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ========================================
+   Leaderboard Responsive
+   ======================================== */
+@media (max-width: 768px) {
+    .top-three-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .top-player-card {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .top-player-card.rank-1 {
+        order: 1;
+        max-width: 100%;
+    }
+
+    .top-player-card.rank-2 {
+        order: 2;
+    }
+
+    .top-player-card.rank-3 {
+        order: 3;
+    }
+
+    .leaderboard-row {
+        padding: 12px 16px;
+    }
+
+    .row-rank {
+        min-width: 24px;
+        font-size: 0.9rem;
+    }
+
+    .row-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .player-avatar {
+        width: 64px;
+        height: 64px;
+    }
+
+    .top-player-card {
+        padding: 20px;
+    }
+
+    .leaderboard-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .hours-badge {
+        align-self: flex-end;
+    }
+}
+
+/* ========================================
    Updates Section
    ======================================== */
 .updates-list {
@@ -983,7 +1443,7 @@ section {
 
 .update-content {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 16px;
 }
 
