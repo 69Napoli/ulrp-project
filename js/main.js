@@ -395,72 +395,72 @@ const topPlayers = [
     },
     {
         rank: 3,
-        name: "DarkWolf",
+        name: "Grenade",
         discord_id: "345678901",
-        discord_tag: "darkwolf_ro",
+        discord_tag: "Grenade",
         avatar: "https://cdn.discordapp.com/embed/avatars/2.png",
         hours: 423,
         lastSeen: "Văzut acum 1h"
     },
     {
         rank: 4,
-        name: "CristiRO",
+        name: "Mako",
         discord_id: "456789012",
-        discord_tag: "cristiro",
+        discord_tag: "Mako",
         avatar: "https://cdn.discordapp.com/embed/avatars/3.png",
         hours: 389,
         lastSeen: "Online"
     },
     {
         rank: 5,
-        name: "ShadowKing",
+        name: "Ursu",
         discord_id: "567890123",
-        discord_tag: "shadowking",
+        discord_tag: "Ursu",
         avatar: "https://cdn.discordapp.com/embed/avatars/4.png",
         hours: 356,
         lastSeen: "Văzut acum 2h"
     },
     {
         rank: 6,
-        name: "NightRider",
+        name: "Melo",
         discord_id: "678901234",
-        discord_tag: "nightrider_rp",
+        discord_tag: "Melo",
         avatar: "https://cdn.discordapp.com/embed/avatars/0.png",
         hours: 312,
         lastSeen: "Văzut acum 3h"
     },
     {
         rank: 7,
-        name: "DragonFire",
+        name: "Rutiera",
         discord_id: "789012345",
-        discord_tag: "dragonfire",
+        discord_tag: "Rutiera",
         avatar: "https://cdn.discordapp.com/embed/avatars/1.png",
         hours: 278,
         lastSeen: "Online"
     },
     {
         rank: 8,
-        name: "StormBreaker",
+        name: "JorJ",
         discord_id: "890123456",
-        discord_tag: "stormbreaker",
+        discord_tag: "JorJ",
         avatar: "https://cdn.discordapp.com/embed/avatars/2.png",
         hours: 234,
         lastSeen: "Văzut acum 5h"
     },
     {
         rank: 9,
-        name: "IcePhoenix",
+        name: "Orgo",
         discord_id: "901234567",
-        discord_tag: "icephoenix_ro",
+        discord_tag: "Orgo",
         avatar: "https://cdn.discordapp.com/embed/avatars/3.png",
         hours: 198,
         lastSeen: "Văzut acum 1 zi"
     },
     {
         rank: 10,
-        name: "BlazeMaster",
+        name: "Cocorino",
         discord_id: "012345678",
-        discord_tag: "blazemaster",
+        discord_tag: "Cocorino",
         avatar: "https://cdn.discordapp.com/embed/avatars/4.png",
         hours: 156,
         lastSeen: "Online"
