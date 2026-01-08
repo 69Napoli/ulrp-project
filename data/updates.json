@@ -1,0 +1,64 @@
+{
+    "updates": [
+        {
+            "id": "update-1",
+            "version": "v1.8.5",
+            "dateText": "În urmă cu 2 zile",
+            "title": "Pachet Nou de Vehicule",
+            "description": "Am adăugat 15 vehicule personalizate noi pe serverul nostru, inclusiv BMW M8 Competition 2020, Mercedes-AMG GT 63S 2023, Porsche 911 GT3 RS 2023 și altele.",
+            "sections": [
+                {
+                    "icon": "🚗",
+                    "title": "Vehicule Noi Adăugate",
+                    "items": [
+                        "BMW M8 Competition 2020",
+                        "Mercedes-AMG GT 63S 2023",
+                        "Porsche 911 GT3 RS 2023",
+                        "Audi RS7 Sportback 2023",
+                        "Și multe altele..."
+                    ]
+                },
+                {
+                    "icon": "🔧",
+                    "title": "Funcționalități Vehicule",
+                    "items": [
+                        "Handling personalizat pentru fiecare vehicul",
+                        "Interior și exterior detaliat",
+                        "Sunete realiste ale motorului",
+                        "Modificări personalizate disponibile"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "update-2",
+            "version": "v1.8.4",
+            "dateText": "În urmă cu 5 zile",
+            "title": "Extindere Hartă",
+            "description": "Noi zone adăugate pe hartă, inclusiv un mall de lux, complex de parcare subterană, nou district rezidențial și multiple zone de divertisment cu funcționalități exclusive.",
+            "sections": [
+                {
+                    "icon": "🏢",
+                    "title": "Zone Noi",
+                    "items": [
+                        "Mall de Lux",
+                        "Complex de Parcare Subterană",
+                        "District Rezidențial Nou",
+                        "Zonă de Divertisment",
+                        "Zone Exclusive VIP"
+                    ]
+                },
+                {
+                    "icon": "🎮",
+                    "title": "Funcționalități",
+                    "items": [
+                        "Magazine și shopuri interactive",
+                        "Noi oportunități de job",
+                        "Colectabile ascunse",
+                        "Locații pentru evenimente speciale"
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel | Urban Legends</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-card">
+            <div class="login-logo">
+                <img src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Urban Legends">
+            </div>
+            <h1>Admin Panel</h1>
+            <p class="login-subtitle">Introdu parola pentru a accesa panoul de administrare</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Parolă</label>
+                    <input type="password" id="password" placeholder="Introdu parola..." autocomplete="off">
+                </div>
+                <div class="error-message" id="loginError"></div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M13.8 12H3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Autentificare
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div class="admin-container" id="adminContainer" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Urban Legends" class="sidebar-logo">
+                <span class="sidebar-title">Admin Panel</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="updates">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Updates
+                </a>
+                <a href="index.html" class="nav-item" target="_blank">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Vezi Site
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn btn-secondary btn-full" id="exportBtn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Export JSON
+                </button>
+                <button class="btn btn-outline btn-full" id="logoutBtn">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Deconectare
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Updates View -->
+            <div class="view" id="updatesView">
+                <div class="view-header">
+                    <div>
+                        <h1>Updates</h1>
+                        <p class="view-subtitle">Gestionează actualizările serverului</p>
+                    </div>
+                    <button class="btn btn-primary" id="addUpdateBtn">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Adaugă Update
+                    </button>
+                </div>
+
+                <!-- Updates List -->
+                <div class="updates-grid" id="updatesList">
+                    <!-- Updates will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Update Form (hidden by default) -->
+            <div class="view" id="updateFormView" style="display: none;">
+                <div class="view-header">
+                    <div>
+                        <h1 id="formTitle">Adaugă Update</h1>
+                        <p class="view-subtitle">Completează detaliile pentru update</p>
+                    </div>
+                    <button class="btn btn-secondary" id="cancelFormBtn">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Anulează
+                    </button>
+                </div>
+
+                <div class="form-layout">
+                    <!-- Form -->
+                    <div class="form-container">
+                        <form id="updateForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="version">Versiune</label>
+                                    <input type="text" id="version" placeholder="ex: v1.8.6" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dateText">Data Text</label>
+                                    <input type="text" id="dateText" placeholder="ex: În urmă cu 1 zi" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="title">Titlu</label>
+                                <input type="text" id="title" placeholder="Titlul update-ului" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Descriere</label>
+                                <textarea id="description" rows="3" placeholder="Descrierea update-ului..." required></textarea>
+                            </div>
+
+                            <!-- Sections -->
+                            <div class="sections-container">
+                                <div class="sections-header">
+                                    <h3>Secțiuni</h3>
+                                    <button type="button" class="btn btn-small" id="addSectionBtn">
+                                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        Adaugă Secțiune
+                                    </button>
+                                </div>
+                                <div id="sectionsWrapper">
+                                    <!-- Sections will be added here dynamically -->
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="updateId">
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Salvează Update
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Preview -->
+                    <div class="preview-container">
+                        <h3>Previzualizare</h3>
+                        <div class="preview-card" id="previewCard">
+                            <div class="update-card">
+                                <div class="update-header">
+                                    <span class="version-tag" id="previewVersion">v0.0.0</span>
+                                    <span class="update-date" id="previewDate">Acum</span>
+                                </div>
+                                <h3 id="previewTitle">Titlu Update</h3>
+                                <p id="previewDescription">Descrierea update-ului va apărea aici...</p>
+                                <div class="update-content" id="previewSections">
+                                    <!-- Preview sections will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <h3>Confirmare Ștergere</h3>
+            <p>Ești sigur că vrei să ștergi acest update? Această acțiune nu poate fi anulată.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelDeleteBtn">Anulează</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Șterge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Mesaj</div>
+
+    <script src="js/admin.js"></script>
+</body>
+
+</html>

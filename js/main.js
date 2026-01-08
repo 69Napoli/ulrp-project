@@ -536,6 +536,72 @@ function initLeaderboard() {
 }
 
 // ========================================
+// Dynamic Updates Loading
+// ========================================
+async function loadUpdates() {
+    const updatesList = document.getElementById('updatesList');
+    if (!updatesList) return;
+
+    try {
+        // Try localStorage first (synced from admin panel), then fallback to JSON file
+        const stored = localStorage.getItem('ulrp_updates');
+        let updates;
+
+        if (stored) {
+            updates = JSON.parse(stored);
+        } else {
+            const response = await fetch('data/updates.json');
+            const data = await response.json();
+            updates = data.updates || [];
+        }
+
+        renderUpdates(updates);
+    } catch (error) {
+        console.error('Failed to load updates:', error);
+        updatesList.innerHTML = '<p style="color: var(--text-muted); text-align: center;">Nu s-au putut încărca update-urile.</p>';
+    }
+}
+
+function renderUpdates(updates) {
+    const updatesList = document.getElementById('updatesList');
+    if (!updatesList || !updates.length) return;
+
+    updatesList.innerHTML = updates.map(update => `
+        <div class="update-card">
+            <div class="update-header">
+                <span class="version-tag">${escapeHtml(update.version)}</span>
+                <span class="update-date">${escapeHtml(update.dateText)}</span>
+            </div>
+            <h3>${escapeHtml(update.title)}</h3>
+            <p>${escapeHtml(update.description)}</p>
+            ${update.sections && update.sections.length > 0 ? `
+                <div class="update-content">
+                    ${update.sections.map(section => `
+                        <div class="update-list-box">
+                            <h4>${section.icon} ${escapeHtml(section.title)}</h4>
+                            <ul>
+                                ${section.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+
+    // Observe new update cards for animations
+    updatesList.querySelectorAll('.update-card').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+}
+
+// ========================================
 // Initialize
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -557,6 +623,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize Top Players Leaderboard
     initLeaderboard();
+
+    // Load dynamic updates
+    loadUpdates();
 
     // Add loaded class for CSS animations
     document.body.classList.add('loaded');
