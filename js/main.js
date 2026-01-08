@@ -433,102 +433,11 @@ async function fetchDiscordWidget() {
 // ========================================
 // Top Players Leaderboard
 // ========================================
-// TODO: Replace static data with API fetch
+// TODO: Fetch leaderboard data from API
 // API Endpoint: https://your-server.com/api/leaderboard
 // Expected response: { players: [...] }
 
-const topPlayers = [
-    {
-        rank: 1,
-        name: "VENDETTA",
-        discord_id: "123456789",
-        discord_tag: "vendetta_rp",
-        avatar: "https://cdn.discordapp.com/embed/avatars/0.png",
-        hours: 512,
-        lastSeen: "Online"
-    },
-    {
-        rank: 2,
-        name: "xNapoli",
-        discord_id: "234567890",
-        discord_tag: "xnapoli",
-        avatar: "https://cdn.discordapp.com/embed/avatars/1.png",
-        hours: 487,
-        lastSeen: "Online"
-    },
-    {
-        rank: 3,
-        name: "Grenade",
-        discord_id: "345678901",
-        discord_tag: "Grenade",
-        avatar: "https://cdn.discordapp.com/embed/avatars/2.png",
-        hours: 423,
-        lastSeen: "Văzut acum 1h"
-    },
-    {
-        rank: 4,
-        name: "Mako",
-        discord_id: "456789012",
-        discord_tag: "Mako",
-        avatar: "https://cdn.discordapp.com/embed/avatars/3.png",
-        hours: 389,
-        lastSeen: "Online"
-    },
-    {
-        rank: 5,
-        name: "Ursu",
-        discord_id: "567890123",
-        discord_tag: "Ursu",
-        avatar: "https://cdn.discordapp.com/embed/avatars/4.png",
-        hours: 356,
-        lastSeen: "Văzut acum 2h"
-    },
-    {
-        rank: 6,
-        name: "Melo",
-        discord_id: "678901234",
-        discord_tag: "Melo",
-        avatar: "https://cdn.discordapp.com/embed/avatars/0.png",
-        hours: 312,
-        lastSeen: "Văzut acum 3h"
-    },
-    {
-        rank: 7,
-        name: "Rutiera",
-        discord_id: "789012345",
-        discord_tag: "Rutiera",
-        avatar: "https://cdn.discordapp.com/embed/avatars/1.png",
-        hours: 278,
-        lastSeen: "Online"
-    },
-    {
-        rank: 8,
-        name: "JorJ",
-        discord_id: "890123456",
-        discord_tag: "JorJ",
-        avatar: "https://cdn.discordapp.com/embed/avatars/2.png",
-        hours: 234,
-        lastSeen: "Văzut acum 5h"
-    },
-    {
-        rank: 9,
-        name: "Orgo",
-        discord_id: "901234567",
-        discord_tag: "Orgo",
-        avatar: "https://cdn.discordapp.com/embed/avatars/3.png",
-        hours: 198,
-        lastSeen: "Văzut acum 1 zi"
-    },
-    {
-        rank: 10,
-        name: "Cocorino",
-        discord_id: "012345678",
-        discord_tag: "Cocorino",
-        avatar: "https://cdn.discordapp.com/embed/avatars/4.png",
-        hours: 156,
-        lastSeen: "Online"
-    }
-];
+const topPlayers = [];
 
 function renderTop3Players() {
     const container = document.getElementById('topThreePlayers');
