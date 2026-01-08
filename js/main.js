@@ -180,30 +180,93 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 // ========================================
+// Section URL Mapping for Dynamic URL Updates
+// ========================================
+const sectionUrlMap = {
+    'home': 'acasa',
+    'features': 'informatii',
+    'leaderboard': 'clasament',
+    'server': 'server',
+    'updates': 'updates'
+};
+
+// Reverse mapping for direct URL access
+const urlToSectionMap = Object.fromEntries(
+    Object.entries(sectionUrlMap).map(([key, value]) => [value, key])
+);
+
+// ========================================
 // Active Navigation Link on Scroll
 // ========================================
 const sections = document.querySelectorAll('section[id]');
 
-function updateActiveNav() {
-    const scrollPosition = window.scrollY + 100;
+function updateActiveNavLink(currentSectionId) {
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+        link.classList.remove('active');
+        const href = link.getAttribute('href');
 
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.offsetHeight;
-        const sectionId = section.getAttribute('id');
-
-        if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-            document.querySelectorAll('.nav-menu a').forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${sectionId}`) {
-                    link.classList.add('active');
-                }
-            });
+        // Match either the section ID directly or via the URL mapping
+        if (href === `#${currentSectionId}` ||
+            href === `#${sectionUrlMap[currentSectionId]}`) {
+            link.classList.add('active');
         }
     });
 }
 
-window.addEventListener('scroll', updateActiveNav);
+// ========================================
+// Dynamic URL Updates with Intersection Observer
+// ========================================
+const urlObserverOptions = {
+    root: null,
+    rootMargin: '-50% 0px -50% 0px', // Triggers when section is in middle of viewport
+    threshold: 0
+};
+
+const urlObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const sectionId = entry.target.id;
+            const urlHash = sectionUrlMap[sectionId] || sectionId;
+
+            // Update URL without page reload
+            if (sectionId === 'home') {
+                // For home section, remove hash completely for clean URL
+                history.replaceState(null, '', window.location.pathname);
+            } else {
+                history.replaceState(null, '', `#${urlHash}`);
+            }
+
+            // Update active nav link
+            updateActiveNavLink(sectionId);
+        }
+    });
+}, urlObserverOptions);
+
+// Observe all sections for URL updates
+document.querySelectorAll('section[id]').forEach(section => {
+    urlObserver.observe(section);
+});
+
+// ========================================
+// Handle Direct URL Access (Deep Linking)
+// ========================================
+function handleDirectUrlAccess() {
+    const hash = window.location.hash.slice(1); // Remove the '#'
+    if (hash) {
+        // Check if hash matches a URL mapping or a section ID directly
+        const targetSectionId = urlToSectionMap[hash] || hash;
+        const targetSection = document.getElementById(targetSectionId);
+
+        if (targetSection) {
+            // Slight delay to ensure page is fully loaded
+            setTimeout(() => {
+                lenis.scrollTo(targetSection, {
+                    offset: -header.offsetHeight
+                });
+            }, 100);
+        }
+    }
+}
 
 // ========================================
 // Intersection Observer for Animations
@@ -605,8 +668,8 @@ function escapeHtml(text) {
 // Initialize
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Initial nav state
-    updateActiveNav();
+    // Handle direct URL access (deep linking)
+    handleDirectUrlAccess();
 
     // Initialize Preloader
     initPreloader();
@@ -656,9 +719,5 @@ function debounce(func, wait) {
     };
 }
 
-// Debounced scroll handler for performance
-const debouncedScroll = debounce(() => {
-    updateActiveNav();
-}, 10);
-
-window.addEventListener('scroll', debouncedScroll);
+// Note: Active nav state is now handled by Intersection Observer (urlObserver)
+// for better performance and URL synchronization
