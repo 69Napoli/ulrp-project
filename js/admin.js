@@ -34,7 +34,10 @@ const toast = document.getElementById('toast');
 
 // State
 let updates = [];
+let rulesUpdates = [];
 let deleteTargetId = null;
+let deleteRuleTargetId = null;
+let currentView = 'updates';
 
 // ========================================
 // Authentication
@@ -65,6 +68,7 @@ function showDashboard() {
     loginContainer.style.display = 'none';
     adminContainer.style.display = 'flex';
     loadUpdates();
+    loadRulesUpdates();
 }
 
 function logout() {
@@ -503,3 +507,329 @@ window.confirmDelete = confirmDelete;
 window.removeSection = removeSection;
 window.addItem = addItem;
 window.removeItem = removeItem;
+window.editRuleUpdate = editRuleUpdate;
+window.confirmDeleteRule = confirmDeleteRule;
+
+// ========================================
+// Navigation
+// ========================================
+document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+    item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const view = item.dataset.view;
+        switchView(view);
+    });
+});
+
+function switchView(view) {
+    currentView = view;
+
+    // Update nav active state
+    document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+        item.classList.toggle('active', item.dataset.view === view);
+    });
+
+    // Hide all views
+    document.getElementById('updatesView').style.display = 'none';
+    document.getElementById('updateFormView').style.display = 'none';
+    const rulesView = document.getElementById('rulesUpdatesView');
+    const ruleFormView = document.getElementById('ruleUpdateFormView');
+    if (rulesView) rulesView.style.display = 'none';
+    if (ruleFormView) ruleFormView.style.display = 'none';
+
+    // Show selected view
+    if (view === 'updates') {
+        document.getElementById('updatesView').style.display = 'block';
+    } else if (view === 'rules-updates') {
+        if (rulesView) rulesView.style.display = 'block';
+    }
+}
+
+// ========================================
+// Rules Updates Management
+// ========================================
+async function loadRulesUpdates() {
+    const stored = localStorage.getItem('ulrp_rules_updates');
+    if (stored) {
+        rulesUpdates = JSON.parse(stored);
+    } else {
+        try {
+            const response = await fetch('data/rules-updates.json');
+            const data = await response.json();
+            rulesUpdates = data.rulesUpdates || [];
+            saveRulesUpdates();
+        } catch (error) {
+            console.error('Failed to load rules updates:', error);
+            rulesUpdates = [];
+        }
+    }
+    renderRulesUpdatesList();
+}
+
+function saveRulesUpdates() {
+    localStorage.setItem('ulrp_rules_updates', JSON.stringify(rulesUpdates));
+}
+
+function renderRulesUpdatesList() {
+    const rulesUpdatesList = document.getElementById('rulesUpdatesList');
+    if (!rulesUpdatesList) return;
+
+    if (rulesUpdates.length === 0) {
+        rulesUpdatesList.innerHTML = `
+            <div class="empty-state">
+                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <h3>Nu există modificări de regulament</h3>
+                <p>Adaugă prima modificare folosind butonul de mai sus</p>
+            </div>
+        `;
+        return;
+    }
+
+    rulesUpdatesList.innerHTML = rulesUpdates.map(rule => `
+        <div class="admin-rule-card ${rule.important ? 'important' : ''}" data-id="${rule.id}">
+            <div class="rule-info">
+                <div class="rule-meta">
+                    <span class="category-badge ${rule.category}">${getCategoryText(rule.category)}</span>
+                    ${rule.important ? '<span class="important-badge">Important</span>' : ''}
+                    <span class="date-text">${escapeHtml(rule.dateText)}</span>
+                </div>
+                <h3>${escapeHtml(rule.title)}</h3>
+                <p>${escapeHtml(rule.content.substring(0, 150))}${rule.content.length > 150 ? '...' : ''}</p>
+            </div>
+            <div class="rule-actions">
+                <button class="btn btn-icon" onclick="editRuleUpdate('${rule.id}')" title="Editează">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="btn btn-icon danger" onclick="confirmDeleteRule('${rule.id}')" title="Șterge">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function getCategoryText(category) {
+    const categories = {
+        'modificare': 'Modificare',
+        'clarificare': 'Clarificare',
+        'noua': 'Regulă Nouă',
+        'stergere': 'Regulă Ștearsă'
+    };
+    return categories[category] || category;
+}
+
+// ========================================
+// Rule Update Form
+// ========================================
+const addRuleUpdateBtn = document.getElementById('addRuleUpdateBtn');
+const cancelRuleFormBtn = document.getElementById('cancelRuleFormBtn');
+const ruleUpdateForm = document.getElementById('ruleUpdateForm');
+
+if (addRuleUpdateBtn) {
+    addRuleUpdateBtn.addEventListener('click', () => showRuleUpdateForm());
+}
+
+if (cancelRuleFormBtn) {
+    cancelRuleFormBtn.addEventListener('click', hideRuleUpdateForm);
+}
+
+function showRuleUpdateForm(ruleUpdate = null) {
+    const rulesView = document.getElementById('rulesUpdatesView');
+    const formView = document.getElementById('ruleUpdateFormView');
+    if (!rulesView || !formView) return;
+
+    rulesView.style.display = 'none';
+    formView.style.display = 'block';
+
+    const ruleFormTitle = document.getElementById('ruleFormTitle');
+
+    if (ruleUpdate) {
+        if (ruleFormTitle) ruleFormTitle.textContent = 'Editează Rule Update';
+        document.getElementById('ruleUpdateId').value = ruleUpdate.id;
+        document.getElementById('ruleTitle').value = ruleUpdate.title;
+        document.getElementById('ruleCategory').value = ruleUpdate.category;
+        document.getElementById('ruleContent').value = ruleUpdate.content;
+        document.getElementById('ruleReference').value = ruleUpdate.ruleReference || '';
+        document.getElementById('ruleImportant').checked = ruleUpdate.important;
+
+        // Update category picker selection
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.category === ruleUpdate.category);
+        });
+    } else {
+        if (ruleFormTitle) ruleFormTitle.textContent = 'Adaugă Rule Update';
+        if (ruleUpdateForm) ruleUpdateForm.reset();
+        document.getElementById('ruleUpdateId').value = '';
+        document.getElementById('ruleCategory').value = 'clarificare';
+
+        // Reset category picker
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.category === 'clarificare');
+        });
+    }
+
+    updateRulePreview();
+}
+
+function hideRuleUpdateForm() {
+    const rulesView = document.getElementById('rulesUpdatesView');
+    const formView = document.getElementById('ruleUpdateFormView');
+    if (rulesView) rulesView.style.display = 'block';
+    if (formView) formView.style.display = 'none';
+}
+
+// Category picker
+document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('ruleCategory').value = btn.dataset.category;
+        updateRulePreview();
+    });
+});
+
+// Form submission
+if (ruleUpdateForm) {
+    ruleUpdateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById('ruleUpdateId').value || generateRuleId();
+        const today = new Date();
+        const dateText = today.toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        const ruleData = {
+            id: id,
+            date: today.toISOString().split('T')[0],
+            dateText: dateText,
+            title: document.getElementById('ruleTitle').value,
+            category: document.getElementById('ruleCategory').value,
+            content: document.getElementById('ruleContent').value,
+            ruleReference: document.getElementById('ruleReference').value || null,
+            important: document.getElementById('ruleImportant').checked
+        };
+
+        const existingIndex = rulesUpdates.findIndex(r => r.id === id);
+        if (existingIndex >= 0) {
+            rulesUpdates[existingIndex] = ruleData;
+            showToast('Rule Update actualizat cu succes!');
+        } else {
+            rulesUpdates.unshift(ruleData);
+            showToast('Rule Update adăugat cu succes!');
+        }
+
+        saveRulesUpdates();
+        renderRulesUpdatesList();
+        hideRuleUpdateForm();
+    });
+}
+
+function generateRuleId() {
+    return 'rule-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+}
+
+// Live preview
+function updateRulePreview() {
+    const title = document.getElementById('ruleTitle')?.value || 'Titlu Rule Update';
+    const category = document.getElementById('ruleCategory')?.value || 'clarificare';
+    const content = document.getElementById('ruleContent')?.value || 'Conținutul va apărea aici...';
+    const reference = document.getElementById('ruleReference')?.value;
+    const important = document.getElementById('ruleImportant')?.checked;
+
+    const today = new Date();
+    const dateText = today.toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const previewTitle = document.getElementById('previewRuleTitle');
+    const previewCategory = document.getElementById('previewRuleCategory');
+    const previewDate = document.getElementById('previewRuleDate');
+    const previewContent = document.getElementById('previewRuleContent');
+    const previewReferenceWrapper = document.getElementById('previewRuleReferenceWrapper');
+    const previewReference = document.getElementById('previewRuleReference');
+    const previewCard = document.querySelector('#rulePreviewCard .rule-update-card');
+
+    if (previewTitle) previewTitle.textContent = title;
+    if (previewDate) previewDate.textContent = dateText;
+    if (previewContent) previewContent.textContent = content;
+
+    if (previewCategory) {
+        previewCategory.textContent = getCategoryText(category);
+        previewCategory.className = 'rule-category ' + category;
+    }
+
+    if (previewReferenceWrapper && previewReference) {
+        if (reference) {
+            previewReferenceWrapper.style.display = 'block';
+            previewReference.textContent = reference;
+        } else {
+            previewReferenceWrapper.style.display = 'none';
+        }
+    }
+
+    if (previewCard) {
+        previewCard.classList.toggle('important', important);
+    }
+}
+
+// Add input listeners for live preview
+['ruleTitle', 'ruleContent', 'ruleReference'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updateRulePreview);
+});
+
+const ruleImportant = document.getElementById('ruleImportant');
+if (ruleImportant) ruleImportant.addEventListener('change', updateRulePreview);
+
+// ========================================
+// Edit & Delete Rules
+// ========================================
+function editRuleUpdate(id) {
+    const rule = rulesUpdates.find(r => String(r.id) === String(id));
+    if (rule) {
+        showRuleUpdateForm(rule);
+    }
+}
+
+function confirmDeleteRule(id) {
+    deleteRuleTargetId = id;
+    const modal = document.getElementById('deleteRuleModal');
+    if (modal) modal.classList.add('active');
+}
+
+const cancelDeleteRuleBtn = document.getElementById('cancelDeleteRuleBtn');
+const confirmDeleteRuleBtn = document.getElementById('confirmDeleteRuleBtn');
+const deleteRuleModal = document.getElementById('deleteRuleModal');
+
+if (cancelDeleteRuleBtn) {
+    cancelDeleteRuleBtn.addEventListener('click', () => {
+        if (deleteRuleModal) deleteRuleModal.classList.remove('active');
+        deleteRuleTargetId = null;
+    });
+}
+
+if (confirmDeleteRuleBtn) {
+    confirmDeleteRuleBtn.addEventListener('click', () => {
+        if (deleteRuleTargetId) {
+            rulesUpdates = rulesUpdates.filter(r => String(r.id) !== String(deleteRuleTargetId));
+            saveRulesUpdates();
+            renderRulesUpdatesList();
+            showToast('Rule Update șters cu succes!');
+        }
+        if (deleteRuleModal) deleteRuleModal.classList.remove('active');
+        deleteRuleTargetId = null;
+    });
+}
+
+if (deleteRuleModal) {
+    const backdrop = deleteRuleModal.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            deleteRuleModal.classList.remove('active');
+            deleteRuleTargetId = null;
+        });
+    }
+}

@@ -1785,10 +1785,21 @@ footer {
 }
 
 /* Individual brand colors on hover */
-.social-btn.discord:hover svg { fill: #5865F2; }
-.social-btn.instagram:hover svg { fill: #E4405F; }
-.social-btn.tiktok:hover svg { fill: #ffffff; }
-.social-btn.youtube:hover svg { fill: #FF0000; }
+.social-btn.discord:hover svg {
+    fill: #5865F2;
+}
+
+.social-btn.instagram:hover svg {
+    fill: #E4405F;
+}
+
+.social-btn.tiktok:hover svg {
+    fill: #ffffff;
+}
+
+.social-btn.youtube:hover svg {
+    fill: #FF0000;
+}
 
 /* Responsive - smaller on tablets */
 @media (max-width: 768px) {
@@ -1796,10 +1807,12 @@ footer {
         left: 10px;
         gap: 8px;
     }
+
     .social-btn {
         width: 38px;
         height: 38px;
     }
+
     .social-btn svg {
         width: 16px;
         height: 16px;
@@ -1810,6 +1823,122 @@ footer {
 @media (max-width: 480px) {
     .social-sidebar {
         display: none;
+    }
+}
+
+/* ========================================
+   Rules Updates Section
+   ======================================== */
+.rules-updates-list {
+    display: grid;
+    gap: 16px;
+}
+
+.rule-update-card {
+    background: #0a0f1a;
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    border-left: 3px solid #38bdf8;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.rule-update-card:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+    transform: translateX(5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.rule-update-card.important {
+    border-left-color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.rule-update-card.important:hover {
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.rule-update-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.rule-category {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rule-category.modificare {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.rule-category.clarificare {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+}
+
+.rule-category.noua {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.rule-category.stergere {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.rule-date {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.rule-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #f8fafc;
+}
+
+.rule-content {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.rule-content p {
+    margin: 0;
+}
+
+.rule-reference {
+    font-size: 0.85rem;
+    color: #64748b;
+    padding-top: 12px;
+    border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+/* Responsive Rules Updates */
+@media (max-width: 768px) {
+    .rule-update-card {
+        padding: 20px;
+    }
+
+    .rule-update-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .rule-title {
+        font-size: 1.05rem;
     }
 }
 

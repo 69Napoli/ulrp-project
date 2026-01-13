@@ -187,7 +187,8 @@ const sectionUrlMap = {
     'features': 'informatii',
     'leaderboard': 'clasament',
     'server': 'server',
-    'updates': 'updates'
+    'updates': 'updates',
+    'rules-updates': 'modificari-reguli'
 };
 
 // Reverse mapping for direct URL access
@@ -574,6 +575,76 @@ function escapeHtml(text) {
 }
 
 // ========================================
+// Dynamic Rules Updates Loading
+// ========================================
+async function loadRulesUpdates() {
+    const container = document.getElementById('rules-updates-container');
+    if (!container) return;
+
+    try {
+        // Try localStorage first (synced from admin panel), then fallback to JSON file
+        const stored = localStorage.getItem('ulrp_rules_updates');
+        let rulesUpdates;
+
+        if (stored) {
+            rulesUpdates = JSON.parse(stored);
+        } else {
+            const response = await fetch('data/rules-updates.json');
+            const data = await response.json();
+            rulesUpdates = data.rulesUpdates || [];
+        }
+
+        renderRulesUpdates(rulesUpdates);
+    } catch (error) {
+        console.error('Failed to load rules updates:', error);
+        container.innerHTML = '<p style="color: var(--text-muted); text-align: center;">Nu s-au putut încărca modificările regulamentului.</p>';
+    }
+}
+
+function renderRulesUpdates(rulesUpdates) {
+    const container = document.getElementById('rules-updates-container');
+    if (!container || !rulesUpdates.length) {
+        if (container) {
+            container.innerHTML = '<p style="color: var(--text-muted); text-align: center;">Nu există modificări ale regulamentului momentan.</p>';
+        }
+        return;
+    }
+
+    container.innerHTML = rulesUpdates.map(update => `
+        <div class="rule-update-card ${update.important ? 'important' : ''}">
+            <div class="rule-update-header">
+                <span class="rule-category ${update.category}">${getRuleCategoryText(update.category)}</span>
+                <span class="rule-date">${escapeHtml(update.dateText)}</span>
+            </div>
+            <h3 class="rule-title">${escapeHtml(update.title)}</h3>
+            <div class="rule-content">
+                <p>${escapeHtml(update.content)}</p>
+            </div>
+            ${update.ruleReference ? `
+                <div class="rule-reference">
+                    <span>📋 Regulă afectată: ${escapeHtml(update.ruleReference)}</span>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+
+    // Observe new rule update cards for animations
+    container.querySelectorAll('.rule-update-card').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+function getRuleCategoryText(category) {
+    const categories = {
+        'modificare': 'Modificare',
+        'clarificare': 'Clarificare',
+        'noua': 'Regulă Nouă',
+        'stergere': 'Regulă Ștearsă'
+    };
+    return categories[category] || category;
+}
+
+// ========================================
 // Initialize
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -598,6 +669,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load dynamic updates
     loadUpdates();
+
+    // Load rules updates
+    loadRulesUpdates();
 
     // Add loaded class for CSS animations
     document.body.classList.add('loaded');
