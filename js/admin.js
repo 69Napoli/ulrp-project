@@ -478,9 +478,49 @@ exportBtn.addEventListener('click', () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    showToast('JSON exportat! Copiază fișierul în data/updates.json');
+    showToast('Updates JSON exportat! Copiază fișierul în data/updates.json');
 });
 
+// Export Rules Updates JSON
+const exportRulesUpdatesBtn = document.getElementById('exportRulesUpdatesBtn');
+if (exportRulesUpdatesBtn) {
+    exportRulesUpdatesBtn.addEventListener('click', () => {
+        const data = { rulesUpdates };
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rules-updates.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showToast('Rules Updates JSON exportat! Copiază fișierul în data/rules-updates.json');
+    });
+}
+
+// Export Server Rules (Regulament) JSON
+const exportServerRulesBtn = document.getElementById('exportServerRulesBtn');
+if (exportServerRulesBtn) {
+    exportServerRulesBtn.addEventListener('click', () => {
+        const json = JSON.stringify(rulesData, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rules.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showToast('Regulament JSON exportat! Copiază fișierul în data/rules.json');
+    });
+}
 // ========================================
 // Toast
 // ========================================
@@ -885,10 +925,18 @@ function loadCategoriesForAdmin() {
 
 // Category select event
 const ruleCategorySelect = document.getElementById('rule-category-select');
+const deleteCategoryBtn = document.getElementById('deleteCategoryBtn');
+
 if (ruleCategorySelect) {
     ruleCategorySelect.addEventListener('change', function () {
         const categoryId = this.value;
         currentCategoryId = categoryId;
+
+        // Show/hide delete category button
+        if (deleteCategoryBtn) {
+            deleteCategoryBtn.style.display = categoryId ? 'inline-flex' : 'none';
+        }
+
         if (categoryId) {
             loadCategoryRulesAdmin(categoryId);
         } else {
@@ -1155,3 +1203,62 @@ window.closeCategoryModal = closeCategoryModal;
 window.addSubRuleInput = addSubRuleInput;
 window.editServerRule = editServerRule;
 window.confirmDeleteServerRule = confirmDeleteServerRule;
+window.confirmDeleteCategory = confirmDeleteCategory;
+
+// ========================================
+// Delete Category
+// ========================================
+function confirmDeleteCategory() {
+    if (!currentCategoryId) {
+        showToast('Selectează o categorie mai întâi!', true);
+        return;
+    }
+    const modal = document.getElementById('deleteCategoryModal');
+    if (modal) modal.classList.add('active');
+}
+
+const cancelDeleteCategoryBtn = document.getElementById('cancelDeleteCategoryBtn');
+const confirmDeleteCategoryBtn = document.getElementById('confirmDeleteCategoryBtn');
+const deleteCategoryModal = document.getElementById('deleteCategoryModal');
+
+if (cancelDeleteCategoryBtn) {
+    cancelDeleteCategoryBtn.addEventListener('click', () => {
+        if (deleteCategoryModal) deleteCategoryModal.classList.remove('active');
+    });
+}
+
+if (confirmDeleteCategoryBtn) {
+    confirmDeleteCategoryBtn.addEventListener('click', () => {
+        if (currentCategoryId) {
+            // Remove category from rulesData
+            rulesData.categories = rulesData.categories.filter(c => c.id !== currentCategoryId);
+            rulesData.lastUpdated = new Date().toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            saveRulesData();
+            loadCategoriesForAdmin();
+
+            // Reset UI
+            currentCategoryId = null;
+            const select = document.getElementById('rule-category-select');
+            if (select) select.value = '';
+
+            const deleteCategoryBtnEl = document.getElementById('deleteCategoryBtn');
+            if (deleteCategoryBtnEl) deleteCategoryBtnEl.style.display = 'none';
+
+            document.getElementById('category-rules-list').innerHTML =
+                '<p style="color: #64748b;">Selectează o categorie pentru a vedea regulile.</p>';
+
+            showToast('Categorie ștearsă cu succes!');
+        }
+        if (deleteCategoryModal) deleteCategoryModal.classList.remove('active');
+    });
+}
+
+if (deleteCategoryModal) {
+    const backdrop = deleteCategoryModal.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            deleteCategoryModal.classList.remove('active');
+        });
+    }
+}

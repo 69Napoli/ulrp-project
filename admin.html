@@ -64,14 +64,7 @@
                     </svg>
                     Updates
                 </a>
-                <a href="#" class="nav-item" data-view="rules-updates">
-                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                            stroke-linecap="round" stroke-linejoin="round" />
-                    </svg>
-                    Rules Updates
-                </a>
+
                 <a href="#" class="nav-item" data-view="rules-management">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path
@@ -97,6 +90,15 @@
                             stroke-linejoin="round" />
                     </svg>
                     Export JSON
+                </button>
+
+                <button class="btn btn-secondary btn-full" id="exportServerRulesBtn" style="margin-top: 8px;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Export Regulament
                 </button>
                 <button class="btn btn-outline btn-full" id="logoutBtn">
                     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -133,125 +135,6 @@
                 </div>
             </div>
 
-            <!-- Rules Updates View -->
-            <div class="view" id="rulesUpdatesView" style="display: none;">
-                <div class="view-header">
-                    <div>
-                        <h1>Rules Updates</h1>
-                        <p class="view-subtitle">Gestionează modificările regulamentului</p>
-                    </div>
-                    <button class="btn btn-primary" id="addRuleUpdateBtn">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        Adaugă Rule Update
-                    </button>
-                </div>
-
-                <!-- Rules Updates List -->
-                <div class="updates-grid" id="rulesUpdatesList">
-                    <!-- Rules Updates will be rendered here -->
-                </div>
-            </div>
-
-            <!-- Rule Update Form (hidden by default) -->
-            <div class="view" id="ruleUpdateFormView" style="display: none;">
-                <div class="view-header">
-                    <div>
-                        <h1 id="ruleFormTitle">Adaugă Rule Update</h1>
-                        <p class="view-subtitle">Completează detaliile pentru rule update</p>
-                    </div>
-                    <button class="btn btn-secondary" id="cancelRuleFormBtn">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        Anulează
-                    </button>
-                </div>
-
-                <div class="form-layout">
-                    <!-- Form -->
-                    <div class="form-container">
-                        <form id="ruleUpdateForm">
-                            <div class="form-group">
-                                <label for="ruleTitle">Titlu</label>
-                                <input type="text" id="ruleTitle" placeholder="Ex: Clarificare Regula RDM" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Categorie</label>
-                                <div class="category-picker">
-                                    <button type="button" class="category-btn selected" data-category="clarificare">
-                                        💡 Clarificare
-                                    </button>
-                                    <button type="button" class="category-btn" data-category="modificare">
-                                        ✏️ Modificare
-                                    </button>
-                                    <button type="button" class="category-btn" data-category="noua">
-                                        ✨ Regulă Nouă
-                                    </button>
-                                    <button type="button" class="category-btn" data-category="stergere">
-                                        🗑️ Regulă Ștearsă
-                                    </button>
-                                </div>
-                                <input type="hidden" id="ruleCategory" value="clarificare">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ruleContent">Conținut</label>
-                                <textarea id="ruleContent" rows="5"
-                                    placeholder="Descrierea modificării sau clarificării..." required></textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="ruleReference">Regulă Afectată (opțional)</label>
-                                <input type="text" id="ruleReference" placeholder="Ex: 3.2 - Random Deathmatch">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="ruleImportant">
-                                    <span>⚠️ Marchează ca Important (va fi evidențiat pe pagină)</span>
-                                </label>
-                            </div>
-
-                            <input type="hidden" id="ruleUpdateId">
-
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">
-                                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
-                                        viewBox="0 0 24 24">
-                                        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
-                                    </svg>
-                                    Publică Rule Update
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Preview -->
-                    <div class="preview-container">
-                        <h3>Previzualizare</h3>
-                        <div class="preview-card" id="rulePreviewCard">
-                            <div class="rule-update-card">
-                                <div class="rule-update-header">
-                                    <span class="rule-category clarificare" id="previewRuleCategory">Clarificare</span>
-                                    <span class="rule-date" id="previewRuleDate">Acum</span>
-                                </div>
-                                <h3 class="rule-title" id="previewRuleTitle">Titlu Rule Update</h3>
-                                <div class="rule-content">
-                                    <p id="previewRuleContent">Conținutul va apărea aici...</p>
-                                </div>
-                                <div class="rule-reference" id="previewRuleReferenceWrapper" style="display: none;">
-                                    <span>📋 Regulă afectată: <span id="previewRuleReference"></span></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Rules Management View -->
             <div class="view" id="rulesManagementView" style="display: none;">
@@ -272,6 +155,10 @@
                             </select>
                             <button type="button" class="btn btn-secondary" onclick="openAddCategoryModal()">
                                 + Adaugă Categorie
+                            </button>
+                            <button type="button" class="btn btn-danger" id="deleteCategoryBtn"
+                                onclick="confirmDeleteCategory()" style="display: none;">
+                                🗑️ Șterge Categoria
                             </button>
                         </div>
                     </div>
@@ -444,19 +331,6 @@
         </div>
     </div>
 
-    <!-- Delete Rule Update Confirmation Modal -->
-    <div class="modal" id="deleteRuleModal">
-        <div class="modal-backdrop"></div>
-        <div class="modal-content">
-            <h3>Confirmare Ștergere</h3>
-            <p>Ești sigur că vrei să ștergi această modificare de regulament? Această acțiune nu poate fi anulată.</p>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" id="cancelDeleteRuleBtn">Anulează</button>
-                <button class="btn btn-danger" id="confirmDeleteRuleBtn">Șterge</button>
-            </div>
-        </div>
-    </div>
-
 
     <!-- Category Modal -->
     <div class="modal" id="categoryModal">
@@ -505,6 +379,20 @@
             <div class="modal-actions">
                 <button class="btn btn-secondary" id="cancelDeleteServerRuleBtn">Anulează</button>
                 <button class="btn btn-danger" id="confirmDeleteServerRuleBtn">Șterge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Category Modal -->
+    <div class="modal" id="deleteCategoryModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <h3>⚠️ Confirmare Ștergere Categorie</h3>
+            <p>Ești sigur că vrei să ștergi această categorie? <strong>Toate regulile din această categorie vor fi
+                    șterse!</strong> Această acțiune nu poate fi anulată.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelDeleteCategoryBtn">Anulează</button>
+                <button class="btn btn-danger" id="confirmDeleteCategoryBtn">Șterge Categoria</button>
             </div>
         </div>
     </div>

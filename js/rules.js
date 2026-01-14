@@ -5,8 +5,16 @@
 // Load and render rules
 async function loadRules() {
     try {
-        const response = await fetch('/data/rules.json');
-        const data = await response.json();
+        let data;
+
+        // Try localStorage first (synced from admin panel), then fallback to JSON file
+        const stored = localStorage.getItem('ulrp_server_rules');
+        if (stored) {
+            data = JSON.parse(stored);
+        } else {
+            const response = await fetch('/data/rules.json');
+            data = await response.json();
+        }
 
         // Update meta info
         document.getElementById('rules-last-updated').textContent = data.lastUpdated;
