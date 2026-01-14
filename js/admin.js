@@ -534,14 +534,21 @@ function switchView(view) {
     document.getElementById('updateFormView').style.display = 'none';
     const rulesView = document.getElementById('rulesUpdatesView');
     const ruleFormView = document.getElementById('ruleUpdateFormView');
+    const rulesManagementView = document.getElementById('rulesManagementView');
     if (rulesView) rulesView.style.display = 'none';
     if (ruleFormView) ruleFormView.style.display = 'none';
+    if (rulesManagementView) rulesManagementView.style.display = 'none';
 
     // Show selected view
     if (view === 'updates') {
         document.getElementById('updatesView').style.display = 'block';
     } else if (view === 'rules-updates') {
         if (rulesView) rulesView.style.display = 'block';
+    } else if (view === 'rules-management') {
+        if (rulesManagementView) {
+            rulesManagementView.style.display = 'block';
+            loadRulesData();
+        }
     }
 }
 
@@ -833,3 +840,318 @@ if (deleteRuleModal) {
         });
     }
 }
+
+// ========================================
+// Server Rules Management
+// ========================================
+let rulesData = { lastUpdated: '', categories: [] };
+let currentCategoryId = null;
+let deleteServerRuleTargetId = null;
+
+async function loadRulesData() {
+    const stored = localStorage.getItem('ulrp_server_rules');
+    if (stored) {
+        rulesData = JSON.parse(stored);
+    } else {
+        try {
+            const response = await fetch('data/rules.json');
+            rulesData = await response.json();
+            saveRulesData();
+        } catch (error) {
+            console.error('Failed to load rules:', error);
+            rulesData = { lastUpdated: new Date().toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' }), categories: [] };
+        }
+    }
+    loadCategoriesForAdmin();
+}
+
+function saveRulesData() {
+    localStorage.setItem('ulrp_server_rules', JSON.stringify(rulesData));
+}
+
+function loadCategoriesForAdmin() {
+    const select = document.getElementById('rule-category-select');
+    if (!select) return;
+
+    select.innerHTML = '<option value="">-- Alege categoria --</option>';
+
+    rulesData.categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = `${cat.icon} ${cat.name}`;
+        select.appendChild(option);
+    });
+}
+
+// Category select event
+const ruleCategorySelect = document.getElementById('rule-category-select');
+if (ruleCategorySelect) {
+    ruleCategorySelect.addEventListener('change', function () {
+        const categoryId = this.value;
+        currentCategoryId = categoryId;
+        if (categoryId) {
+            loadCategoryRulesAdmin(categoryId);
+        } else {
+            document.getElementById('category-rules-list').innerHTML =
+                '<p style="color: #64748b;">Selectează o categorie pentru a vedea regulile.</p>';
+        }
+    });
+}
+
+function loadCategoryRulesAdmin(categoryId) {
+    const category = rulesData.categories.find(c => c.id === categoryId);
+    const container = document.getElementById('category-rules-list');
+
+    if (!container) return;
+
+    if (!category || category.rules.length === 0) {
+        container.innerHTML = '<p style="color: #64748b;">Nu există reguli în această categorie.</p>';
+        return;
+    }
+
+    container.innerHTML = category.rules.map(rule => `
+        <div class="admin-rule-item" style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.1); border-radius: 8px; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="background: #38bdf8; color: #030712; font-weight: 700; font-size: 0.85rem; padding: 4px 10px; border-radius: 6px;">${escapeHtml(rule.id)}</span>
+                <span style="font-weight: 600; color: #f8fafc;">${escapeHtml(rule.title)}</span>
+                ${rule.important ? '<span style="background: rgba(239, 68, 68, 0.15); color: #ef4444; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px;">⚠️ Important</span>' : ''}
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-icon" onclick="editServerRule('${categoryId}', '${rule.id}')" title="Editează">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="btn btn-icon danger" onclick="confirmDeleteServerRule('${categoryId}', '${rule.id}')" title="Șterge">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Sub-rule inputs
+let subRuleCount = 0;
+function addSubRuleInput() {
+    subRuleCount++;
+    const container = document.getElementById('sub-rules-container');
+    if (!container) return;
+
+    const div = document.createElement('div');
+    div.className = 'sub-rule-input';
+    div.style.cssText = 'display: flex; gap: 8px; margin-bottom: 8px;';
+    div.innerHTML = `
+        <input type="text" name="sub-rule-id-${subRuleCount}" placeholder="ID (ex: 2.4.1)" style="width: 100px;">
+        <input type="text" name="sub-rule-text-${subRuleCount}" placeholder="Text sub-regulă" style="flex: 1;">
+        <button type="button" class="btn btn-icon danger" style="padding: 8px 12px;" onclick="this.parentElement.remove()">✕</button>
+    `;
+    container.appendChild(div);
+}
+
+// Add rule form
+const addRuleForm = document.getElementById('add-rule-form');
+if (addRuleForm) {
+    addRuleForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!currentCategoryId) {
+            showToast('Selectează o categorie mai întâi!', true);
+            return;
+        }
+
+        const newRule = {
+            id: document.getElementById('new-rule-id').value,
+            title: document.getElementById('new-rule-title').value,
+            description: document.getElementById('new-rule-description').value,
+            important: document.getElementById('new-rule-important').checked,
+            subRules: []
+        };
+
+        // Collect sub-rules
+        document.querySelectorAll('.sub-rule-input').forEach(input => {
+            const id = input.querySelector('input[name^="sub-rule-id"]').value;
+            const text = input.querySelector('input[name^="sub-rule-text"]').value;
+            if (id && text) {
+                newRule.subRules.push({ id, text });
+            }
+        });
+
+        // Add to category
+        const category = rulesData.categories.find(c => c.id === currentCategoryId);
+        if (category) {
+            // Check if rule exists (for editing)
+            const existingIndex = category.rules.findIndex(r => r.id === newRule.id);
+            if (existingIndex >= 0) {
+                category.rules[existingIndex] = newRule;
+                showToast('Regulă actualizată cu succes!');
+            } else {
+                category.rules.push(newRule);
+                showToast('Regulă adăugată cu succes!');
+            }
+
+            // Update lastUpdated
+            rulesData.lastUpdated = new Date().toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            saveRulesData();
+            loadCategoryRulesAdmin(currentCategoryId);
+        }
+
+        // Reset form
+        this.reset();
+        document.getElementById('sub-rules-container').innerHTML = '';
+    });
+}
+
+// Category Modal
+function openAddCategoryModal() {
+    const modal = document.getElementById('categoryModal');
+    if (modal) modal.classList.add('active');
+}
+
+function closeCategoryModal() {
+    const modal = document.getElementById('categoryModal');
+    if (modal) modal.classList.remove('active');
+
+    // Reset form
+    const form = document.getElementById('add-category-form');
+    if (form) form.reset();
+    document.getElementById('new-cat-icon').value = '📜';
+    document.querySelectorAll('.cat-emoji').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.emoji === '📜');
+    });
+}
+
+// Category emoji picker
+document.querySelectorAll('.cat-emoji').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.cat-emoji').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('new-cat-icon').value = btn.dataset.emoji;
+    });
+});
+
+// Add category form
+const addCategoryForm = document.getElementById('add-category-form');
+if (addCategoryForm) {
+    addCategoryForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const newCategory = {
+            id: document.getElementById('new-cat-id').value,
+            icon: document.getElementById('new-cat-icon').value,
+            name: document.getElementById('new-cat-name').value,
+            rules: []
+        };
+
+        // Check if category exists
+        if (rulesData.categories.find(c => c.id === newCategory.id)) {
+            showToast('O categorie cu acest ID există deja!', true);
+            return;
+        }
+
+        rulesData.categories.push(newCategory);
+        saveRulesData();
+        loadCategoriesForAdmin();
+        closeCategoryModal();
+        showToast('Categorie adăugată cu succes!');
+    });
+}
+
+// Category modal backdrop
+const categoryModal = document.getElementById('categoryModal');
+if (categoryModal) {
+    const backdrop = categoryModal.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', closeCategoryModal);
+    }
+}
+
+// Edit server rule
+function editServerRule(categoryId, ruleId) {
+    const category = rulesData.categories.find(c => c.id === categoryId);
+    if (!category) return;
+
+    const rule = category.rules.find(r => r.id === ruleId);
+    if (!rule) return;
+
+    // Populate form
+    document.getElementById('new-rule-id').value = rule.id;
+    document.getElementById('new-rule-title').value = rule.title;
+    document.getElementById('new-rule-description').value = rule.description;
+    document.getElementById('new-rule-important').checked = rule.important;
+
+    // Clear and add sub-rules
+    document.getElementById('sub-rules-container').innerHTML = '';
+    if (rule.subRules && rule.subRules.length > 0) {
+        rule.subRules.forEach(sub => {
+            subRuleCount++;
+            const container = document.getElementById('sub-rules-container');
+            const div = document.createElement('div');
+            div.className = 'sub-rule-input';
+            div.style.cssText = 'display: flex; gap: 8px; margin-bottom: 8px;';
+            div.innerHTML = `
+                <input type="text" name="sub-rule-id-${subRuleCount}" placeholder="ID (ex: 2.4.1)" style="width: 100px;" value="${escapeHtml(sub.id)}">
+                <input type="text" name="sub-rule-text-${subRuleCount}" placeholder="Text sub-regulă" style="flex: 1;" value="${escapeHtml(sub.text)}">
+                <button type="button" class="btn btn-icon danger" style="padding: 8px 12px;" onclick="this.parentElement.remove()">✕</button>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    // Scroll to form
+    document.querySelector('.add-rule-form')?.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Delete server rule
+function confirmDeleteServerRule(categoryId, ruleId) {
+    deleteServerRuleTargetId = { categoryId, ruleId };
+    const modal = document.getElementById('deleteServerRuleModal');
+    if (modal) modal.classList.add('active');
+}
+
+const cancelDeleteServerRuleBtn = document.getElementById('cancelDeleteServerRuleBtn');
+const confirmDeleteServerRuleBtn = document.getElementById('confirmDeleteServerRuleBtn');
+const deleteServerRuleModal = document.getElementById('deleteServerRuleModal');
+
+if (cancelDeleteServerRuleBtn) {
+    cancelDeleteServerRuleBtn.addEventListener('click', () => {
+        if (deleteServerRuleModal) deleteServerRuleModal.classList.remove('active');
+        deleteServerRuleTargetId = null;
+    });
+}
+
+if (confirmDeleteServerRuleBtn) {
+    confirmDeleteServerRuleBtn.addEventListener('click', () => {
+        if (deleteServerRuleTargetId) {
+            const category = rulesData.categories.find(c => c.id === deleteServerRuleTargetId.categoryId);
+            if (category) {
+                category.rules = category.rules.filter(r => r.id !== deleteServerRuleTargetId.ruleId);
+                rulesData.lastUpdated = new Date().toLocaleDateString('ro-RO', { day: 'numeric', month: 'long', year: 'numeric' });
+                saveRulesData();
+                loadCategoryRulesAdmin(deleteServerRuleTargetId.categoryId);
+                showToast('Regulă ștearsă cu succes!');
+            }
+        }
+        if (deleteServerRuleModal) deleteServerRuleModal.classList.remove('active');
+        deleteServerRuleTargetId = null;
+    });
+}
+
+if (deleteServerRuleModal) {
+    const backdrop = deleteServerRuleModal.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', () => {
+            deleteServerRuleModal.classList.remove('active');
+            deleteServerRuleTargetId = null;
+        });
+    }
+}
+
+// Make functions global
+window.openAddCategoryModal = openAddCategoryModal;
+window.closeCategoryModal = closeCategoryModal;
+window.addSubRuleInput = addSubRuleInput;
+window.editServerRule = editServerRule;
+window.confirmDeleteServerRule = confirmDeleteServerRule;

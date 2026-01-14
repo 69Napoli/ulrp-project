@@ -1062,3 +1062,55 @@ body {
         flex-direction: column;
     }
 }
+
+/* ========================================
+   Checkbox Label
+   ======================================== */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.checkbox-label span {
+    user-select: none;
+}
+
+/* ========================================
+   Rules Management Additional Styles
+   ======================================== */
+.existing-rules h3 {
+    color: var(--text-primary);
+}
+
+.add-rule-form {
+    margin-top: 24px;
+}
+
+.sub-rule-input input {
+    padding: 10px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.sub-rule-input input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.admin-rule-item:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+}

@@ -72,6 +72,14 @@
                     </svg>
                     Rules Updates
                 </a>
+                <a href="#" class="nav-item" data-view="rules-management">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Regulament
+                </a>
                 <a href="index.html" class="nav-item" target="_blank">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" />
@@ -245,6 +253,89 @@
                 </div>
             </div>
 
+            <!-- Rules Management View -->
+            <div class="view" id="rulesManagementView" style="display: none;">
+                <div class="view-header">
+                    <div>
+                        <h1>📜 Gestionare Regulament</h1>
+                        <p class="view-subtitle">Gestionează regulile și categoriile serverului</p>
+                    </div>
+                </div>
+
+                <!-- Category Selector -->
+                <div class="form-container" style="margin-bottom: 24px;">
+                    <div class="form-group">
+                        <label>Selectează Categoria</label>
+                        <div style="display: flex; gap: 12px; align-items: center;">
+                            <select id="rule-category-select" style="flex: 1;">
+                                <option value="">-- Alege categoria --</option>
+                            </select>
+                            <button type="button" class="btn btn-secondary" onclick="openAddCategoryModal()">
+                                + Adaugă Categorie
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Current Rules in Category -->
+                    <div class="existing-rules" style="margin-top: 24px;">
+                        <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Reguli în categoria selectată</h3>
+                        <div id="category-rules-list">
+                            <p style="color: #64748b;">Selectează o categorie pentru a vedea regulile.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add New Rule Form -->
+                <div class="form-container">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 20px;">➕ Adaugă Regulă Nouă</h3>
+                    <form id="add-rule-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>ID Regulă</label>
+                                <input type="text" id="new-rule-id" placeholder="Ex: 2.4" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Titlu</label>
+                                <input type="text" id="new-rule-title" placeholder="Ex: Combat Logging" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Descriere</label>
+                            <textarea id="new-rule-description" rows="4" placeholder="Descrierea detaliată a regulii..."
+                                required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="new-rule-important">
+                                <span>⚠️ Regulă Importantă (va fi evidențiată)</span>
+                            </label>
+                        </div>
+
+                        <!-- Sub-rules -->
+                        <div class="sub-rules-section" style="margin-top: 20px;">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <label style="margin-bottom: 0;">Sub-reguli (opțional)</label>
+                                <button type="button" class="btn btn-small" onclick="addSubRuleInput()">
+                                    + Adaugă Sub-regulă
+                                </button>
+                            </div>
+                            <div id="sub-rules-container">
+                                <!-- Dynamic sub-rules inputs -->
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                📤 Salvează Regula
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
             <!-- Update Form (hidden by default) -->
             <div class="view" id="updateFormView" style="display: none;">
                 <div class="view-header">
@@ -366,6 +457,57 @@
         </div>
     </div>
 
+
+    <!-- Category Modal -->
+    <div class="modal" id="categoryModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content" style="max-width: 480px;">
+            <h3>Adaugă Categorie Nouă</h3>
+            <form id="add-category-form">
+                <div class="form-group">
+                    <label>ID Categorie</label>
+                    <input type="text" id="new-cat-id" placeholder="Ex: sanctiuni" required>
+                </div>
+                <div class="form-group">
+                    <label>Nume Categorie</label>
+                    <input type="text" id="new-cat-name" placeholder="Ex: Reguli Sancțiuni" required>
+                </div>
+                <div class="form-group">
+                    <label>Emoji/Icon</label>
+                    <div class="emoji-options">
+                        <button type="button" class="emoji-btn cat-emoji selected" data-emoji="📜">📜</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="🎭">🎭</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="🚗">🚗</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="👥">👥</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="💼">💼</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="⚔️">⚔️</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="🏠">🏠</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="💰">💰</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="🔫">🔫</button>
+                        <button type="button" class="emoji-btn cat-emoji" data-emoji="⚠️">⚠️</button>
+                    </div>
+                    <input type="hidden" id="new-cat-icon" value="📜">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">Anulează</button>
+                    <button type="submit" class="btn btn-primary">Salvează</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Server Rule Modal -->
+    <div class="modal" id="deleteServerRuleModal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <h3>Confirmare Ștergere</h3>
+            <p>Ești sigur că vrei să ștergi această regulă din regulament? Această acțiune nu poate fi anulată.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" id="cancelDeleteServerRuleBtn">Anulează</button>
+                <button class="btn btn-danger" id="confirmDeleteServerRuleBtn">Șterge</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Toast -->
     <div class="toast" id="toast">Mesaj</div>

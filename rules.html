@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Regulament Server - Urban Legends FiveM Roleplay">
+    <meta name="keywords" content="FiveM, Roleplay, GTA V, Romania, Urban Legends, ULRP, Regulament, Reguli">
+    <meta name="author" content="Poseidon Studio">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Regulament | Urban Legends">
+    <meta property="og:description" content="Regulamentul oficial al serverului Urban Legends FiveM Roleplay">
+    <meta property="og:image" content="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png">
+    <meta property="og:url" content="https://ulrp.ro/rules.html">
+    <meta property="og:type" content="website">
+
+    <!-- Discord Embed -->
+    <meta name="theme-color" content="#38bdf8">
+
+    <title>Regulament | Urban Legends</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- Rules Page Specific Styles -->
+    <style>
+        /* Rules Hero */
+        .rules-hero {
+            padding: 160px 0 80px;
+            text-align: center;
+            position: relative;
+        }
+
+        .rules-hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .rules-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #f8fafc, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .rules-hero p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 24px;
+        }
+
+        .rules-meta {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .rules-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Table of Contents */
+        .rules-toc {
+            padding: 0 0 60px;
+        }
+
+        .toc-card {
+            background: #0a0f1a;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .toc-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #f8fafc;
+        }
+
+        .toc-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            background: rgba(56, 189, 248, 0.05);
+            border: 1px solid rgba(56, 189, 248, 0.1);
+            border-radius: 8px;
+            color: #94a3b8;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .toc-item:hover {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: rgba(56, 189, 248, 0.3);
+            color: #38bdf8;
+        }
+
+        .toc-number {
+            background: rgba(56, 189, 248, 0.15);
+            color: #38bdf8;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Rules Content */
+        .rules-content {
+            padding: 0 0 100px;
+        }
+
+        .rules-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .rule-category-section {
+            margin-bottom: 48px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(56, 189, 248, 0.05));
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .category-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .category-header h2 span {
+            color: #38bdf8;
+        }
+
+        .rule-item {
+            background: #0a0f1a;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .rule-item:hover {
+            border-color: rgba(56, 189, 248, 0.2);
+            transform: translateX(4px);
+        }
+
+        .rule-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .rule-number {
+            background: #38bdf8;
+            color: #030712;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .rule-title {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .rule-description {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            padding-left: 52px;
+        }
+
+        .rule-item.important {
+            border-left: 3px solid #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .rule-item.important .rule-number {
+            background: #ef4444;
+        }
+
+        /* Sub-rules */
+        .sub-rules {
+            margin-top: 12px;
+            padding-left: 52px;
+        }
+
+        .sub-rule {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            padding: 8px 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .sub-rule-number {
+            color: #38bdf8;
+            font-weight: 600;
+            min-width: 40px;
+        }
+
+        /* Error state */
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .rules-meta {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .toc-list {
+                grid-template-columns: 1fr;
+            }
+
+            .rule-description {
+                padding-left: 0;
+            }
+
+            .sub-rules {
+                padding-left: 0;
+            }
+
+            .category-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-noise"></div>
+    <div class="bg-gradient"></div>
+
+    <!-- Social Sidebar -->
+    <div class="social-sidebar">
+        <a href="https://www.tiktok.com/@urbanlegendsroleplay" target="_blank" class="social-btn tiktok" title="TikTok">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z" />
+            </svg>
+        </a>
+        <a href="https://www.youtube.com/@UrbanLegendsRP" target="_blank" class="social-btn youtube" title="YouTube">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+        </a>
+        <a href="#" class="social-btn instagram" title="Instagram">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+            </svg>
+        </a>
+    </div>
+
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <nav>
+                <a href="index.html" class="logo">
+                    <img src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Urban Legends">
+                    <span class="logo-text">URBAN LEGENDS</span>
+                </a>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="index.html">Acasă</a></li>
+                    <li><a href="index.html#features">Informații</a></li>
+                    <li><a href="index.html#server">Server</a></li>
+                    <li><a href="index.html#updates">Updates</a></li>
+                    <li><a href="rules.html" class="active">Regulament</a></li>
+                    <li>
+                        <a href="https://store.ulrp.ro/" target="_blank" class="nav-shop">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                            </svg>
+                            Shop
+                        </a>
+                    </li>
+                    <li><a href="https://discord.gg/urbanlegends" target="_blank" class="nav-cta">Intră Discord</a></li>
+                </ul>
+                <div class="mobile-toggle" onclick="toggleMobile()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Rules Hero Section -->
+    <section class="rules-hero">
+        <div class="container">
+            <div class="rules-hero-content">
+                <div class="section-tag">REGULAMENT OFICIAL</div>
+                <h1>Regulament Server</h1>
+                <p>Citește cu atenție regulamentul înainte de a te juca pe server. Nerespectarea regulilor poate duce la
+                    sancțiuni.</p>
+                <div class="rules-meta">
+                    <span>📅 Ultima actualizare: <span id="rules-last-updated">15 Ianuarie 2025</span></span>
+                    <span>📋 <span id="rules-total-count">0</span> Reguli</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules Navigation/Table of Contents -->
+    <section class="rules-toc">
+        <div class="container">
+            <div class="toc-card">
+                <h3>📑 Cuprins</h3>
+                <div class="toc-list" id="toc-container">
+                    <!-- Generated dynamically from categories -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rules Content -->
+    <section class="rules-content">
+        <div class="container">
+            <div class="rules-container" id="rules-container">
+                <!-- Rules loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <img src="https://r2.fivemanage.com/jcehjZbFXcSq7q6h4bxBn/logo2.png" alt="Urban Legends">
+                        <span class="logo-text">URBAN LEGENDS</span>
+                    </a>
+                    <p>Experimentează cel mai imersiv server de roleplay FiveM cu scripturi personalizate, vehicule și o
+                        comunitate activă.</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Navigație</h4>
+                    <ul>
+                        <li><a href="index.html">Acasă</a></li>
+                        <li><a href="index.html#features">Despre Noi</a></li>
+                        <li><a href="index.html#server">Server</a></li>
+                        <li><a href="index.html#updates">Updates</a></li>
+                        <li><a href="index.html#rules-updates">Modificări Reguli</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="terms.html">Termeni și Servicii</a></li>
+                        <li><a href="privacy.html">Confidențialitate</a></li>
+                        <li><a href="rules.html">Reguli</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Conectează-te</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/urbanlegends" target="_blank">Discord</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 <a href="https://discord.gg/urbanlegends" target="_blank">Poseidon Studio</a>. Toate
+                    drepturile rezervate.</p>
+                <p>Made by <a href="https://discord.gg/gvprod" target="_blank"
+                        style="color: #f59e0b; font-weight: 600; text-decoration: none;">GV-Productions</a></p>
+                <p>Not affiliated with Rockstar Games, Inc. or Take-Two Interactive Software, Inc.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">Copiat în clipboard!</div>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        function toggleMobile() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+    <script src="js/rules.js"></script>
+</body>
+
+</html>
