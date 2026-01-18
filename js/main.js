@@ -436,77 +436,178 @@ async function fetchDiscordWidget() {
 // ========================================
 // TODO: Fetch leaderboard data from API
 // API Endpoint: https://your-server.com/api/leaderboard
-// Expected response: { players: [...] }
+// Expected response: { forbes: [...], longeviv: [...] }
 
+// Forbes (Money) players data - Will be fetched from API
+const topForbesPlayers = [];
+
+// Longeviv (Hours) players data - Will be fetched from API
 const topPlayers = [];
 
-function renderTop3Players() {
-    const container = document.getElementById('topThreePlayers');
-    if (!container) return;
-
-    const top3 = topPlayers.slice(0, 3);
-    const rankColors = ['gold', 'silver', 'bronze'];
-
-    container.innerHTML = top3.map((player, index) => {
-        const rankClass = `rank-${player.rank}`;
-        const badgeClass = rankColors[index];
-        const isOnline = player.lastSeen === 'Online';
-        const crown = player.rank === 1 ? '<span class="crown-icon">👑</span>' : '';
-
-        return `
-            <div class="top-player-card ${rankClass}">
-                ${crown}
-                <div class="rank-badge ${badgeClass}">
-                    #${player.rank}
-                </div>
-                <div class="player-avatar-container">
-                    <img src="${player.avatar}" alt="${player.name}" class="player-avatar">
-                    <div class="online-indicator ${isOnline ? '' : 'offline'}"></div>
-                </div>
-                <div class="player-name">${player.name}</div>
-                <div class="player-discord-tag">@${player.discord_tag}</div>
-                <div class="hours-display">
-                    <span class="hours-number">${player.hours}</span>
-                    <span class="hours-label">ore</span>
-                </div>
-                <div class="last-seen ${isOnline ? 'online' : ''}">${isOnline ? 'Online acum' : player.lastSeen}</div>
-            </div>
-        `;
-    }).join('');
+// ========================================
+// Money Formatting Helper
+// ========================================
+function formatMoney(amount) {
+    return '$' + amount.toLocaleString('ro-RO');
 }
 
-function renderLeaderboardList() {
-    const container = document.getElementById('leaderboardList');
-    if (!container) return;
+// ========================================
+// Top 3 Players Rendering Helper
+// ========================================
+function renderTopThree(players, statType = 'money') {
+    const top3 = players.slice(0, 3);
+    const rankClasses = ['rank-2', 'rank-1', 'rank-3']; // Order: 2nd, 1st, 3rd
+    const rankBadgeClasses = ['silver', 'gold', 'bronze'];
+    const badgeLabels = ['#2', '#1', '#3'];
+    const isForbes = statType === 'money';
+    const forbesClass = isForbes ? ' forbes' : '';
 
-    const restPlayers = topPlayers.slice(3);
+    return `
+        <div class="top-three-container">
+            ${[top3[1], top3[0], top3[2]].map((player, i) => {
+        if (!player) return '';
+        const isFirst = i === 1;
 
-    container.innerHTML = restPlayers.map(player => {
-        const isOnline = player.lastSeen === 'Online';
+        // Format stat value and label
+        let statNumber, statLabel;
+        if (isForbes) {
+            statNumber = formatMoney(player.money);
+            statLabel = 'TOTAL';
+        } else {
+            statNumber = player.hours;
+            statLabel = 'ORE';
+        }
 
         return `
-            <div class="leaderboard-row">
-                <div class="row-left">
-                    <span class="row-rank">#${player.rank}</span>
-                    <img src="${player.avatar}" alt="${player.name}" class="row-avatar">
-                    <div class="row-info">
-                        <span class="row-name">${player.name}</span>
-                        <span class="row-discord">@${player.discord_tag}</span>
+                    <div class="top-player-card ${rankClasses[i]}${forbesClass}">
+                        ${isFirst ? '<span class="crown-icon">👑</span>' : ''}
+                        <div class="rank-badge ${rankBadgeClasses[i]}">${badgeLabels[i]}</div>
+                        <div class="player-avatar-container">
+                            <img class="player-avatar" src="${player.avatar}" alt="${player.name}">
+                            <span class="online-indicator"></span>
+                        </div>
+                        <div class="player-name">${player.name}</div>
+                        <div class="player-discord-tag">@${player.discord_tag}</div>
+                        <div class="hours-display">
+                            <span class="hours-number">${statNumber}</span>
+                            <span class="hours-label">${statLabel}</span>
+                        </div>
+                        <div class="last-seen online">Online acum</div>
                     </div>
-                </div>
-                <div class="hours-badge">
-                    <span class="hours-value">${player.hours}</span>
-                    <span class="hours-text">ore</span>
-                </div>
-            </div>
-        `;
-    }).join('');
+                `;
+    }).join('')}
+        </div>
+        
+        <div class="leaderboard-divider">
+            <span>Restul clasamentului</span>
+        </div>
+    `;
 }
 
-function initLeaderboard() {
-    renderTop3Players();
-    renderLeaderboardList();
+// ========================================
+// Forbes Leaderboard Rendering
+// ========================================
+function renderForbesLeaderboard() {
+    const container = document.getElementById('forbesLeaderboardList');
+    if (!container) return;
+
+    // Get players 4-10 for the list
+    const restOfPlayers = topForbesPlayers.slice(3);
+
+    const listHTML = restOfPlayers.map(player => `
+        <div class="leaderboard-item">
+            <div class="rank normal">${player.rank}</div>
+            <img class="avatar" src="${player.avatar}" alt="${player.name}">
+            <div class="player-info">
+                <div class="player-name">${player.name}</div>
+                <div class="player-tag">@${player.discord_tag}</div>
+            </div>
+            <div class="stat money">${formatMoney(player.money)}</div>
+        </div>
+    `).join('');
+
+    // Get parent panel-inner and render top 3 + list
+    const panelInner = container.closest('.panel-inner');
+    if (panelInner) {
+        panelInner.innerHTML = renderTopThree(topForbesPlayers, 'money') +
+            `<div class="leaderboard-list" id="forbesLeaderboardList">${listHTML}</div>`;
+    }
 }
+
+// ========================================
+// Longeviv Leaderboard Rendering
+// ========================================
+function renderLongevivLeaderboard() {
+    const container = document.getElementById('longevivLeaderboardList');
+    if (!container) return;
+
+    // Get players 4-10 for the list
+    const restOfPlayers = topPlayers.slice(3);
+
+    const listHTML = restOfPlayers.map(player => `
+        <div class="leaderboard-item">
+            <div class="rank normal">${player.rank}</div>
+            <img class="avatar" src="${player.avatar}" alt="${player.name}">
+            <div class="player-info">
+                <div class="player-name">${player.name}</div>
+                <div class="player-tag">@${player.discord_tag}</div>
+            </div>
+            <div class="stat hours">${player.hours} ore</div>
+        </div>
+    `).join('');
+
+    // Get parent panel-inner and render top 3 + list
+    const panelInner = container.closest('.panel-inner');
+    if (panelInner) {
+        panelInner.innerHTML = renderTopThree(topPlayers, 'hours') +
+            `<div class="leaderboard-list" id="longevivLeaderboardList">${listHTML}</div>`;
+    }
+}
+
+// ========================================
+// Leaderboard Toggle Functionality
+// ========================================
+function initLeaderboardToggles() {
+    const toggles = document.querySelectorAll('.leaderboard-toggle');
+
+    toggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const category = toggle.dataset.category;
+            const panel = document.getElementById(`${category}-panel`);
+            const isActive = toggle.classList.contains('active');
+
+            // Close all panels and deactivate all toggles
+            toggles.forEach(t => {
+                t.classList.remove('active');
+            });
+            document.querySelectorAll('.leaderboard-panel').forEach(p => {
+                p.classList.remove('expanded');
+            });
+
+            // If wasn't active, open this one
+            if (!isActive) {
+                toggle.classList.add('active');
+                panel.classList.add('expanded');
+            }
+        });
+    });
+}
+
+// ========================================
+// Initialize Leaderboard
+// ========================================
+function initLeaderboard() {
+    // Render Forbes leaderboard
+    renderForbesLeaderboard();
+
+    // Render Longeviv (Hours) leaderboard
+    renderLongevivLeaderboard();
+
+    // Initialize toggle buttons (content hidden by default)
+    initLeaderboardToggles();
+}
+
+
 
 // ========================================
 // Dynamic Updates Loading

@@ -353,24 +353,59 @@
             <div class="section-header">
                 <div class="section-tag">CLASAMENT</div>
                 <h2 class="section-title">Top Jucători</h2>
-                <p class="section-subtitle">Cei mai activi membri ai comunității noastre</p>
+                <p class="section-subtitle">Cei mai activi și bogați membri ai comunității noastre</p>
             </div>
 
-            <div class="leaderboard-container">
-                <!-- Top 3 Players - Featured Row -->
-                <div class="top-three-container" id="topThreePlayers">
-                    <!-- Top 3 will be rendered by JavaScript -->
-                </div>
+            <div class="leaderboard-toggles">
+                <button class="leaderboard-toggle" data-category="forbes">
+                    <span class="toggle-icon">💰</span>
+                    <div class="toggle-info">
+                        <span class="toggle-title">Top Forbes</span>
+                        <span class="toggle-subtitle">Cei Mai Bogați</span>
+                    </div>
+                    <span class="toggle-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
+                </button>
 
-                <!-- Leaderboard List (4th - 10th) -->
-                <div class="leaderboard-list" id="leaderboardList">
-                    <!-- List will be rendered by JavaScript -->
+                <button class="leaderboard-toggle" data-category="longeviv">
+                    <span class="toggle-icon">⏱️</span>
+                    <div class="toggle-info">
+                        <span class="toggle-title">Top PlayTime</span>
+                        <span class="toggle-subtitle">Cei Mai Activi</span>
+                    </div>
+                    <span class="toggle-arrow">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Expandable Content Panels (hidden by default) -->
+            <div class="leaderboard-panel" id="forbes-panel">
+                <div class="panel-inner">
+                    <div class="leaderboard-list" id="forbesLeaderboardList">
+                        <!-- Forbes content rendered by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaderboard-panel" id="longeviv-panel">
+                <div class="panel-inner">
+                    <div class="leaderboard-list" id="longevivLeaderboardList">
+                        <!-- Longeviv content rendered by JS -->
+                    </div>
                 </div>
             </div>
 
             <!-- TODO: Replace static data with API fetch
                  API Endpoint: https://your-server.com/api/leaderboard
-                 Expected response: { players: [...] } -->
+                 Expected response: { forbes: [...], longeviv: [...] } -->
         </div>
     </section>
 
